@@ -9,5 +9,5 @@ mysql_query('set names gb2312');
 mysql_query("update admin set outtime=now() where username='$username' ");
 session_destroy();
 unset($_SESSION['sessionuser']);
-echo "<script>location.href='index.php';</script>";
+echo "<script>window.history.back();</script>";
 ?>
