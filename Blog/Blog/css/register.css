@@ -1,0 +1,13 @@
+#register-container {position:relative;height:32.6em;width:100%;background:#F5F5F5;}
+#register-container .content {position:relative;margin:0em 30em;}
+#register-container .content form #step input {float:left;position:relative;background:red;}
+#register-container .content form #step .selected {background:gold;}
+#register-container .content form #showeverystep div {height:20.6em;width:24em;background:red;display:none;border-radius:0px 0px 10px 10px;}
+#register-container .content form #showeverystep #step1 p{margin-top:2em;margin-left:2em;}
+#register-container .content form #showeverystep #step1 p label {font-size:0.8em;;}
+#register-container .content form #showeverystep #step1 input {height:2em;width:15em;}
+#register-container .content form #showeverystep #step2  input {height:2em;width:15em;margin-top:1em;}
+#register-container .content form #showeverystep #step3  input {height:2em;width:15em;margin-top:1em;}
+#register-container .content form #showeverystep #step3  .submit {width:20em;height:3em;margin:2em 4em;border-radius:0.3em;}
+#register-container .content form #showeverystep #step3  .submit:hover {background:gold;color:white;}
+#register-container .content form #showeverystep .active {display:block;}

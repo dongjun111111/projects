@@ -1,0 +1,30 @@
+*{margin:0;padding:0;word-break:break-all;}
+h1 {position:absolute;margin-left:3em;font-size:39px;margin-top:0.3em;}
+#header {height:5em;width:100%;background:white;}
+#header ul {position:relative;display:block;line-height:5em;padding-left:19.1em;}
+#header ul li{float:left;list-style:none;font-size:25px;padding-left:3em;padding-left:6em;}
+#header p{position:absolute;margin-left:70em;margin-top:0.5em;}/*这里曾经导致登录按钮故障，之前是没有position；absolute,而是直margin-left*/
+
+#container {height:100em;width:100%;background:#F5F5F5;}
+#container .left {height:100em;width:12em;float:left;}
+
+#container .content {height:100em;width:60em;background:#F5F5F5;margin:0 auto;float:left;}
+#container .content .focus {position:relative;height:20em;width:100%;background:gold;}
+#container .content .content-show {height:70em;width:37em;background:red;float:left;margin:1em 1em 1em 1em;}
+#container .content .content-createnew1 {height:35em;width:20em;background:green;float:left;margin:1em 1em 0em 0em;}
+#container .content .content-createnew2 {height:34em;width:20em;background:blue;float:left;margin:1em 1em 0em 0em;}
+#container .content .content-bottom {height:7em;width:100%;background:purple;float:left;}
+
+#container .right{height:100em;width:12.3em;float:left;}
+
+#footer {height:4em;width:100%;background:#093;}
+#footer p {text-align:center;}
+
+#login {position:fixed;height:14em;width:28em;background:#093;top:10em;left:29em;border-radius:7px;display:none;}
+#login p {float:right;margin:4px;}
+#login form {position:relative;margin:2em 4em;}
+#login form input {height:2em;width:18em;margin:2px;border-radius:5px;}
+#login form .confirm {width:12em;}
+#login form p{float:left;}
+#login form .submit {height:2.5em;width:21em;margin:6px;}
+#login form .submit:hover {background:red;color:white;}

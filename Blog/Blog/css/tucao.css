@@ -1,0 +1,8 @@
+body {background:#F5F5F5;}
+#show {position:relative;height:50em;width:60em;margin:0 auto;background:pink;overflow:hidden;}
+#show .show-detail {height:38em;width:35em;background:white;float:left;margin:1em;}
+#show .show-create {height:38em;width:20em;background:blue;float:left;margin:1em;}
+#show .show-bottom {height:9em;width:58em;background:grey;float:left;margin:0em 1em 1em 1em;}
+
+#foot {position:relative;height:4em;width:100%;background:#093;}
+#foot p {text-align:center;}
