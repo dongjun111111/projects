@@ -1,0 +1,5 @@
+#infoContent {position:relative;height:32.6em;width:100%;background:#F5F5F5;}
+#infoContent form {position:absolute;margin-left:35em;margin-top:5em;}
+#infoContent form input {margin-top:0.5em;height:1.5em;}
+#infoContent form .submit {height:2.5em;width:17em;background:#093;border-radius:0.3em;}
+#infoContent form .submit:hover {background:red;color:white;}
