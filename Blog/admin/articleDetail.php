@@ -70,7 +70,7 @@ while($row = mysql_fetch_array($article))
 <form action="doLogin.php" method="post">
 姓名:<input type="text" name="username" placeholder="请输入您的姓名" /><br>
 密码:<input type="password" name="password" placeholder="请输入您的密码" /><br>
-<p>验证:<input type="text" name="confirm" class="confirm" placeholder="请输入验证码" /><img src="#" height="2em" width="5em" alt="confirm" /></p>
+<p>验证:<input type="text" name="confirm" class="confirm" placeholder="请输入验证码" /><img src="code.php" height="30em" width="60em" alt="confirm" /></p>
 <input type="submit" value="登录" class="submit" />
 </form>
 <p style="position:relative;margin:-2em 3em;"><a href="/register.php">没有账号?去注册</a></p>

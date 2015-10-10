@@ -5,7 +5,7 @@ body {background:#F5F5F5;}
 #show .show-detail hr {background:white;height:0.66em;width:100%;}
 #show .show-detail ul div div {text-indent:2em;height:8.2em;width:100%;overflow:hidden;margin-top:0.5em;}
 
-#show .show-create {height:38em;width:20em;background:gold;float:left;margin:1em;}
+#show .show-create {height:38em;width:20em;background:#F5F5F5;float:left;margin:1em;}
 #show .show1 {position:relative;height:6.7em;width:100%;background:blue;}
 #show .show1 input {height:8em;width:100%;background:#093;font-size:1em;}
 #show .show1 input:hover {background:red;color:white;}

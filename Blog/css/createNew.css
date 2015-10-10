@@ -1,0 +1,5 @@
+#createNew {height:32.6em;width:100%;background:#F5F5F5;}
+#createNew .create form {position:relative;}
+#createNew .create form .title {height:2em;width:16em;}
+#createNew .create form .submit {position:absolute;height:5em;width:20em;background:rgb(0,204,102);margin-left:41em;margin-top:2em;border-radius:0.4em;}
+#createNew .create form .submit:hover {color:white;background:#093;}
