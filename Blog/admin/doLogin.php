@@ -27,6 +27,6 @@ if($ok)
 }
 else
 {
-   echo "<script>alert('µÇÂ¼Ê§°Ü');location.href='index.php';</script>";
+   echo "<script>alert('µÇÂ¼Ê§°Ü');window.history.back();</script>";
 }
 ?>

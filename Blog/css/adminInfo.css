@@ -1,5 +1,8 @@
 #infoContent {position:relative;height:32.6em;width:100%;background:#F5F5F5;}
-#infoContent form {position:absolute;margin-left:35em;margin-top:5em;}
-#infoContent form input {margin-top:0.5em;height:1.5em;}
-#infoContent form .submit {height:2.5em;width:17em;background:#093;border-radius:0.3em;}
-#infoContent form .submit:hover {background:red;color:white;}
+#infoContent .infoContent form {position:absolute;margin-left:35em;margin-top:2.5em;}
+#infoContent .infoContent form input {margin-top:0.5em;height:1.5em;}
+#infoContent .infoContent form .submit {height:2.5em;width:17em;background:#093;border-radius:0.3em;}
+#infoContent .infoContent form .submit:hover {background:red;color:white;}
+#infoContent .menu {position:absolute;height:30.6em;width:5em;background:#F5F5F5;margin-top:1em;}
+#infoContent .menu ul li input {height:5em;width:100%;background:#093;margin-top:1em;text-align:center;}
+#infoContent .menu ul li input:hover {background:red;color:white;}

@@ -9,8 +9,9 @@ body {background:#F5F5F5;}
 #show .show1 {position:relative;height:6.7em;width:100%;background:blue;}
 #show .show1 input {height:8em;width:100%;background:#093;font-size:1em;}
 #show .show1 input:hover {background:red;color:white;}
-#show .show2 {margin-top:2em;height:18em;width:100%;background:purple;}
+#show .show2 {margin-top:2em;height:18em;width:100%;background:#093;}
 #show .show2 #tagscloud {text-align:center;clear:both;}
+#show .show3 {height:9.7em;width:100%;background:#093;margin-top:1em;}
 #show .show-bottom {height:9em;width:58em;background:purple;float:left;margin:0em 1em 1em 1em;}
 
 #foot {position:relative;height:4em;width:100%;background:#093;}

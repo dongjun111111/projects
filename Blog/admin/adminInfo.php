@@ -62,6 +62,7 @@ else
 </p>
 </div>
 <div id="infoContent">
+<div class="infoContent">
 <form action="doAdminInfo.php" method="post" enctype="multipart/form-data">
 <input type="hidden" name="id" value="<?php echo $id;?>" />
 用户:<input type="text" name="username" value="<?php echo $username;?>" /><br>
@@ -84,14 +85,46 @@ if($classify == "3")
 <option value='1'>一般用户</option>
 </select><br>";}
 ?>
-<input type="submit" value="刷新" class="submit" />
+<input type="submit" value="刷新个人资料" class="submit" />
 </form>
 </div>
+<div class="menu">
+<ul>
+<?php 
+if ($classify >1)
+{echo '
+<li><input type="button" onclick="allUser()"  value="用户管理" /></li>
+<li><input type="button" onclick="allArticle()"  value="文章管理" /></li>
+<li><input type="button" onclick="allTucao()"  value="吐槽管理" /></li>
+';}
+else
+{echo '
+<li><input type="button" onclick="allArticle()"  value="文章管理" /></li>
+<li><input type="button" onclick="allTucao()"  value="吐槽管理" /></li>
+';
+}
+?>
+</ul>
+</div>
+</div>
+
 <div id="footer">
 <p><a href="../copyRight.php">版权声明</a>&nbsp|&nbsp<a href="http://dongjun111111.github.io/D-Jason.html">关于作者</a>&nbsp|&nbsp<a href="../contact.php">联系作者</a></p><br>
 <p>Copyright © 1998 - 2015 D-Jason. All Rights Reserved</p>
 </div>
-
-
+<script>
+function allUser()
+{
+ window.location.href='allUser.php';
+}
+function allArticle()
+{
+ window.location.href='allArticle.php';
+}
+function allTucao()
+{
+ window.location.href='allTucao.php';
+}
+</script>
 </body>
 </html>

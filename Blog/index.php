@@ -15,6 +15,7 @@ while($row=mysql_fetch_array($result))
   $username=$row['username'];
 }
 
+$showArticle=mysql_query("select * from article limit 4");
 ?>
 <!doctype html>
 <html>
@@ -59,8 +60,9 @@ else
 <div class="focus">
 焦点图
 </div>
-<div class="content-show">
-在这里显示好文章
+<div class="content-show"><!--一次显示4个，每个高17em,border为0.5em-->
+<div class="show-article">
+</div>
 </div>
 <div class="content-createnew1">
 在这里显示每日科技新闻，来自其他网站

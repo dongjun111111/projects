@@ -29,7 +29,7 @@ $article=mysql_query("select * from article limit 3");
 <link href="./css/init.css" rel="stylesheet" type="text/css">
 <link href="./css/index.css" rel="stylesheet" type="text/css">
 <link href="./css/article.css" rel="stylesheet" type="text/css">
-<link href="./css/tagCloud.css" rel="stylesheet" type="text/css"   />
+<link href="./css/tagCloud.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <h1>D-Jason</h1>
@@ -43,7 +43,7 @@ $article=mysql_query("select * from article limit 3");
 <?php
 if(!$sessionuser)
 { echo '
- <a href="javascript:void(0)" onclick="start()"><img src="./images/login.png" height="80px" width="80px" alt="Login" /></a>
+ <a href="javascript:void(0)" onclick="start()"><img src="./images/login.png" height="80px" width="80px" alt="Login"  /></a>
  ';
 }
 else
@@ -123,6 +123,8 @@ else
 	}
 	?>
     </div>  
+</div>
+<div class="show3">
 </div>
 
 </div>
