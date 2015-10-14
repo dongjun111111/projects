@@ -58,6 +58,7 @@ while($row = mysql_fetch_array($article))
   <div  class="x">'.$row["content"].'</div >
  ';}
 ?>
+<div class="comment" id="comment"><p style="font-size:2em;"><a href="comment.php?id=<?php echo $id;?>">评论</a></p></div>
 </div>
 
 <div id="footer">
@@ -77,7 +78,7 @@ while($row = mysql_fetch_array($article))
 </div>
 <script  src="../js/login.js"></script>
 <script>
-function like()
+function like()//点赞的功能
 {
 
 }

@@ -15,8 +15,9 @@ while($row=mysql_fetch_array($result))
   $photo=$row['photo'];
   $username=$row['username'];
 }
-
 $article=mysql_query("select * from article limit 3");
+
+
 ?>
 <!doctype html>
 <html>
@@ -62,10 +63,23 @@ else
 <ul>
 <?php 
 while($rows=mysql_fetch_array($article))
-{
+{  
+	$voteee=mysql_query("select * from vote");
+  while($rowm=mysql_fetch_array($voteee))
+	{
+   $articleiddd=$rowm['articleid'];
+  }
+	if($rows['id'] == $articleiddd)
+	{
+		//$votee=mysql_query("select count(*) from vote as a,article as b where a.articleid=b.id and a.status=1 ");
+    $votee=mysql_query("select count(*) from vote as a left join article as b on a.articleid=b.id and a.status=1 ");
+    $voter=mysql_fetch_row($votee); 
+    $vote=$voter[0];
+	}
+	$vote=empty($vote)?0:$vote;
 	echo '
 <li><div style="position:relative;height:12em;width:100%;background:#093;overflow:hidden;">
-<h2>'.$rows["title"].'</h2><span style="position:absolute;margin-top:-0.5em;margin-left:23em;font-size:0.8em;">'.$rows["author"].' 发表于'.$rows["createtime"].'&nbsp <img src="./images/star.png" height="16px" width="16px" alt="star"/>'.$rows["vote"].'</span>
+<h2>'.$rows["title"].'</h2><span style="position:absolute;margin-top:-0.5em;margin-left:23em;font-size:0.8em;">'.$rows["author"].' 发表于'.$rows["createtime"].'&nbsp <img src="./images/star.png" height="16px" width="16px" alt="star"/>'.$vote.'</span>
 <div >'.$rows["content"].'</div>
 <p><a href="./admin/articleDetail.php?id='.$rows["id"].'" style="float:right;color:white;">阅读原文</a></p>
 </div><hr></li>
@@ -90,6 +104,9 @@ else
 <div class="show2">
     <div id="tagscloud">
 	<?php
+	$randtitle=mysql_query("select title from article order by rand()");
+	while($rands=mysql_fetch_array($randtitle))
+	{
 	if(!$sessionuser)
 	{echo '
      <a href="" class="tagc1">111111111</a>
@@ -107,20 +124,17 @@ else
 	';}
 	else
 	{echo '
-	   <a href="" class="tagc1">'.$id.'</a>
-	<a href="" class="tagc2">'.$username.'</a>
-	<a href="" class="tagc5">'.$username.'</a>
-	<a href="" class="tagc1">'.$id.'</a>
-	<a href="" class="tagc2">'.$username.'</a>
-	<a href="" class="tagc5">'.$username.'</a>
-	<a href="" class="tagc1">'.$id.'</a>
-	<a href="" class="tagc2">'.$username.'</a>
-	<a href="" class="tagc5">'.$username.'</a>
-	<a href="" class="tagc1">'.$id.'</a>
-	<a href="" class="tagc2">'.$username.'</a>
-	<a href="" class="tagc5">'.$username.'</a>
+	   <a href="./admin/articleDetail.php?id='.$rands["id"].'" class="tagc1">'.$rands["title"].'</a>
+	<a href="./admin/articleDetail.php?id='.$rands["id"].'" class="tagc2">'.$rands["title"].'</a>
+	<a href="./admin/articleDetail.php?id='.$rands["id"].'" class="tagc5">'.$rands["title"].'</a>
+	<a href="./admin/articleDetail.php?id='.$rands["id"].'" class="tagc1">'.$rands["title"].'</a>
+	<a href="./admin/articleDetail.php?id='.$rands["id"].'" class="tagc2">'.$rands["title"].'</a>
+	<a href="./admin/articleDetail.php?id='.$rands["id"].'" class="tagc5">'.$rands["title"].'</a>
+	<a href="./admin/articleDetail.php?id='.$rands["id"].'" class="tagc1">'.$rands["title"].'</a>
+	<a href="./admin/articleDetail.php?id='.$rands["id"].'" class="tagc2">'.$rands["title"].'</a>
+	<a href="./admin/articleDetail.php?id='.$rands["id"].'" class="tagc5">'.$rands["title"].'</a>
 	';
-	}
+	}}
 	?>
     </div>  
 </div>

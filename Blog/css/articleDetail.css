@@ -2,3 +2,8 @@
 #detail h2 {text-align:center;}
 #detail .span1 {position:relative;margin-left:50em;}
 #detail .x {text-indent:2em;overflow:auto;}
+#detail .comment {position:fixed;background:pink;top:6.3em;left:77em;opacity:0.8;border-radius:0.4em;}
+#detail .comment:hover {background:red;}
+#detail .comment a {color:red;}
+#detail .comment a:hover {color:white;}
+

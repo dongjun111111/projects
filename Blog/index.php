@@ -5,7 +5,7 @@ $username=$_SESSION['sessionuser'];
 
 $conn=mysql_connect('localhost','root','903456967');
 mysql_select_db('blog');
-mysql_query('set names gb2312');
+mysql_query('set names utf8');
 
 $result=mysql_query("select * from admin where username='$username'");
 while($row=mysql_fetch_array($result))
@@ -27,6 +27,7 @@ $showArticle=mysql_query("select * from article limit 4");
 <meta name="Descriptions" content="">
 <link href="./css/init.css" rel="stylesheet" type="text/css">
 <link href="./css/index.css" rel="stylesheet" type="text/css">
+<link href="./css/index-article.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 <h1>D-Jason</h1>
@@ -60,9 +61,30 @@ else
 <div class="focus">
 焦点图
 </div>
+
+
+
 <div class="content-show"><!--一次显示4个，每个高17em,border为0.5em-->
 <div class="show-article">
+<ul>
+<?php
+while($rows=mysql_fetch_array($showArticle))
+{
+echo '
+<li><div style="height:17em;width:100%;background:#093;">
+<h2>'.$rows['title'].'</h2>
+<span style="position:absolute;margin-top:-0.5em;margin-left:26em;font-size:0.8em;">'.$rows["author"].' 发表于'.$rows["createtime"].'&nbsp <img src="./images/star.png" height="16px" width="16px" alt="star"/>'.$rows["vote"].'</span>
+<div>'.$rows["content"].'</div>
+<p><a href="./admin/articleDetail.php?id='.$rows["id"].'" style="float:right;color:white;">阅读原文</a></p>
+</div></li><hr style="height:0.5em;background:#F5F5F5;">
+';
+}
+?>
+</ul>
 </div>
+
+
+
 </div>
 <div class="content-createnew1">
 在这里显示每日科技新闻，来自其他网站

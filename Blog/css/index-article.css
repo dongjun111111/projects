@@ -1,1 +1,3 @@
-#content-show .show-article {position:relative;height:70em;width:100%;background:red;}
+.content-show .show-article {position:relative;height:70em;width:100%;background:red;}
+.content-show .show-article ul li h2{text-align:center;}
+.content-show .show-article ul div div {text-indent:2em;height:12em;width:100%;overflow:hidden;margin-top:1em;}
