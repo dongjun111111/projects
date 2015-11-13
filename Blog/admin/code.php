@@ -1,8 +1,8 @@
 <?php
-header("content-type:image/png");//Í·ÎÄ¼şÉùÃ÷ÀàĞÍ
-$db=imagecreate(50,25);//´óĞ¡£¬¿í£¬¸ß
-$b=imagecolorallocate($db,0,204,102);//Í¼Æ¬ÑÕÉ«
-$f=imagecolorallocate($db,255,255,255);//×ÖÌåÑÕÉ«
+header("content-type:image/png");//å¤´æ–‡ä»¶å£°æ˜ç±»å‹
+$db=imagecreate(50,25);//å¤§å°ï¼Œå®½ï¼Œé«˜
+$b=imagecolorallocate($db,0,204,102);//å›¾ç‰‡é¢œè‰² è¿™é‡Œå›¾ç‰‡é¢œè‰²çš„ä½ç½®ä¸€å®šè¦æ˜¯å›¾ç‰‡æœ¬èº«çš„é¢œè‰²åœ¨ä¸Šé¢ï¼Œä¸‹é¢æ˜¯å­—ä½“é¢œè‰²ï¼Œä¸ç„¶ä¼šå‡ºé”™
+$f=imagecolorallocate($db,255,255,255);//å­—ä½“é¢œè‰²
 $s="";
 for($i=0;$i<4;$i++)
 {
@@ -11,12 +11,12 @@ for($i=0;$i<4;$i++)
 }
 session_start();
 $_SESSION['code']=$s;
-imagestring($db,5,5,5,$s,$f);//µÚÒ»¸öÊı×ÖÎª×ÖÌå´óĞ¡£¬µÚ¶ş¸öÎª×ÖÌå¾à×ó¾àÀë£¬µÚÈı¸öÊÇ¾à¶¥²¿¾àÀë
-//imagefill($db,0,0,$b);//»­Í¼·Ç±ØĞë
+imagestring($db,5,5,5,$s,$f);//ç¬¬ä¸€ä¸ªæ•°å­—ä¸ºå­—ä½“å¤§å°ï¼Œç¬¬äºŒä¸ªä¸ºå­—ä½“è·å·¦è·ç¦»ï¼Œç¬¬ä¸‰ä¸ªæ˜¯è·é¡¶éƒ¨è·ç¦»
+//imagefill($db,0,0,$b);//ç”»å›¾éå¿…é¡»
 imagepng($db);
 $sessionuser=$_SESSION['sessionuser'];
 if(!$sessionuser)
 {
- echo "<script>alert('½ûÖ¹·Ç·¨·ÃÎÊ');location.href='../index.php';</script>";
+ echo "<script>alert('ç¦æ­¢éæ³•è®¿é—®');location.href='../index.php';</script>";
 }
 ?>
