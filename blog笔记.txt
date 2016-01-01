@@ -1,0 +1,359 @@
+1.连接数据库代码出错mysql_connect
+2.计算数据库总条数出错count(*)->mysql_fetch_row()->$row[0]
+3.取出数据显示：
+ 1) .while($row=mysql_fetch_array(select * from chart))
+ 2）.$row['example']
+4.三目运算式写法：条件？执行1：执行2
+5.limit 函数写法:
+".($currpage-1)*$pagesize.",".$pagesize
+6.已知id，取出数据库中对应的数据不会写
+7.update语句写错了，，，，，，，，，，，，，，，，，，，，
+update 表 set ""='',............
+
+8.过滤函数写法
+magic($str)
+{
+$str=trim($str);
+if(!get_magic_quotes_gpc)
+	{
+$str=addslashes($str);
+}
+return htmlspecialcars($str);
+}
+
+9.
+ckeditor编辑器的引入
+1）在script中引入：src="./ckeditor/ckeditor.js"
+2)class="ckeditor"
+10.md5加密
+输入时加密，存入数据库时加密
+11.ip：$_SERVER['REMOTE_ADDR'];
+12.php通过mail()或者socket协议发送邮件
+1）.通过mail()方法[代码少，配置麻烦，兼容性差]
+mail(接收者，主题，内容,(报头,额外参数))
+php.ini的配置,sendmail的支持
+（（（（还不会发邮件啊，总是报错））））））
+
+13.支付宝支付
+通过官方文档来
+
+14.读取本地文件：
+1）.前端（array.php）：<?php
+echo <<< EOT
+<form action="doArray.php" method="post"  >
+  <input type="file" name="file" />
+  <input type="submit" value="打开" />
+</form>
+EOT;
+?>
+2）后台（doArray.php）.
+<?php
+session_start();
+$file=$_POST['file'];
+$myfile=fopen($file,"r") or die("unable to open file!");
+$content=fread($myfile,filesize($file));
+fclose ($myfile);
+$_SESSION["content"];
+echo $_SESSION["content"];
+?>
+后台获取数据并显示
+
+15.对本地文件重写或者追加内容
+重写：
+function write_file($filename, $buffer)
+{
+$fp = fopen($filename, "w") or die("couldn't open $filename");
+flock( $fp, LOCK_EX );
+$write = fputs($fp, $buffer);//此处
+flock( $fp, LOCK_UN );
+fclose($fp);
+return true;
+}
+
+//追加内容
+function append_to_file($filename, $buffer)
+{
+$fp = fopen($filename, "a") or die("couldn't open $filename");
+flock( $fp, LOCK_EX );
+fputs($fp, $buffer);  //此处
+flock( $fp, LOCK_UN );
+fclose($fp);
+return true;
+}
+
+16.文件上传
+1->这一种简单，但是没有做文件过滤，待完善
+$file=$_FILES['file'];
+//print_r($file);
+$name=$file['name'];
+$type=$file['type'];
+$size=$file['size'];
+$tmp_name=$file['tmp_name'];
+//echo $name."<br>".$type."<br>".$size."<br>".$tmp_name;
+$re=move_uploaded_file($tmp_name,'uploads/'.$name);
+if($re)
+{
+ echo "<script>alert('success');</script>";
+}
+else
+{
+echo "<script>alert('fail');</script>";
+}
+
+2->
+1）.表单必须用post方式，并且上.enctype="multipart-data"；用来指定表单编码的数据方式，让服务器知道我们要传递一个文件并带有常规的表单信
+2）.input type="file"
+3）.后台用$_FILES()来接收
+
+实例：
+<?php
+
+$name=$_POST['name'];
+$price=$_POST['price'];
+$file=$_FILES['file'];
+
+//提示上传错误
+if ($_FILES['file']['error']>0)//提示上传错误
+{
+ switch ($_FILES['file']['error'])
+	{
+    case 1:
+    echo "上传的文件超过允许的最大值";
+	break;
+	case 2:
+		echo "上传的文件超过html表单中MAX_FILES_SIZE的值";
+	break;
+	case 3:
+		echo "文件只有部分被上传";
+	break;
+	case 4:
+		echo "没有文件被上传";
+	break;
+	default:
+		echo "未知错误";
+ }
+ exit;
+
+}
+//限制文件大小
+$maxsize=5000000;//5000k
+if($_FILES['file']['size']>$maxsize)
+{
+ echo "太大";
+ exit;
+}
+
+//限制文件类型方法1.=>
+/*list($dl,$xl)=explode("/",$_FILES['file']['type']);
+if($dl!='image')
+{
+	echo "请上传一个图片";
+	exit;
+}
+*/
+
+//限制文件类型方法2.=> 这一种比较好
+$allowtype=array("png","jpg","gif","jpeg");
+$arr=explode(".",$_FILES['file']['name']);
+$hz=$arr[count($arr)-1];//取得文件后缀名
+if(!in_array($hz,$allowtype))
+{
+  echo "请上传允许的图片类型的文件";
+  exit;
+}
+//
+$filepath="./uploads/";//定义图片上传路径
+$randname=date("Y").date("m").date("d").date("H").date("i").date("s").rand(1000,9999).".".$hz;//定义一个以当前时间和随机数结合的数字，作为上传图片的新名字
+if(is_uploaded_file($_FILES['file']['tmp_name']))
+{
+     if(move_uploaded_file($_FILES['file']['tmp_name'],$filepath.$randname))
+	{
+	 echo '上传成功';
+	 }
+	 else
+	{
+	 echo '上传失败';
+	 }
+}
+else
+{
+echo "不是一个上传文件";
+exit;
+}
+
+//echo "没有错误";
+//print_r($file);
+
+ ?>
+
+17.下载：
+header("content-disposition:attachment ;filename='myfile.txt'");//关键之处
+readfile("demo.txt");//读取指定文件
+
+18.打开新url和用正则表达式提取网页内容
+<?php
+header("content-type:text/html; charset=utf-8");
+
+$url="http://www.weather.com.cn/weather1d/101020100.shtml";
+$fp=@fopen($url,"r") or die("超时");
+$fcontents= file_get_contents($url);
+//echo $fcontents;
+eregi("<title>(.*)</title>",$fcontents,$rg);
+eregi("<!--小导航开始-->(.*) <!--小导航结束-->",$fcontents,$rg);
+
+//print_r($rg);
+echo $rg[0]."<br>";
+echo $rg[1];
+?>
+
+19,。字符串操作
+php
+  //构造字符串
+  $str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  echo "原字符串：".$str."
+";
+  //按各种方式进行截取
+  $str1 = substr($str,5);
+  echo "从第5个字符开始取至最后：".$str1."
+";
+  $str2 = substr($str,9,4);
+  echo "从第9个字符开始取4个字符：".$str2."
+";
+  $str3 = substr($str,-5);
+  echo "取倒数5个字符：".$str3."
+";
+  $str4 = substr($str,-8,4);
+  echo "从倒数第8个字符开始向后取4个字符：".$str4."
+";
+  $str5 = substr($str,-8,-2);
+  echo "从倒数第8个字符开始取到倒数第2个字符为止：".$str5."
+";
+ ?>
+
+20.require和include的区别
+：require引用的文件若出现问题，则会导致程序无法进行，安全性较高；include无论文件有无问题，程序都会执行。
+
+21.文件操作：
+1）简单的有：readfile（"file"）；简单粗暴
+2）
+1->
+$file=fopen("example.txt","r")or die("提示信息");
+echo fread($file,filesize("example.txt"));
+fclose($file);
+2->
+$file=fopen("example.txt","r")or die ("提示信息");
+while(!feof($myfile))
+{
+  echo fgets($myfile)."<br>";//只读取一行
+}
+fclose($myfile);
+3->
+$myfile=fopen("example.txt","r") or die("提示信息");
+while(!feof($myfile))
+{
+echo fgetc($myfile);//逐行读取
+}
+fclose($myfile);
+
+1->、2->和3->的效果一样，都值得推荐
+
+
+22.文件写入操作
+1.覆写（以前内容消失，重新写入）
+$myfile=fopen("one.txt","w")or die("error");//没有则创建一个文件
+$str="33333";
+fwrite($myfile,$str);
+fclose($myfile);
+2.追加内容
+
+1->//（这一种亲测有效，推荐）
+$myfile=fopen("","a");
+fwrite($myfile,$str);
+fclose($myfile);
+
+2->//（这一种试过，感觉不行，还是重写了）
+追加内容时，不用再写fopen和fclose,直接写
+file_put_contents(文件名,写的内容（字符串）,FILE_APPEND);
+FILE_APPNED一定要加，一定要加，一定要加
+fopenfclose不用不用不用
+
+23.cookie
+设置cookie：setcookie("username","bob",time()+3600);//1小时后过期
+取回cookie：$_COOKIE["username"];
+
+24.php过滤器（filter）
+http://www.w3school.com.cn/php/php_filter.asp
+
+25.通常，当函数完成/执行后，会删除所有变量。不过，有时我需要不删除某个局部变量。实现这一点需要更进一步的工作。
+要完成这一点，请在您首次声明变量时使用 static 关键词；
+
+26.数组元素循环输出
+1->
+$arr=array();
+foreach($arr as $value)
+{
+ echo $value;
+}
+
+2->
+$arr=array();
+for($i=0;$i<=strlen($arr);$i++)
+{
+echo "$arr[$i]";
+}
+
+27.验证码：
+<?php
+
+$db=imagecreate(50,25);//创建图片
+$b=imagecolorallocate($db,0,204,102);//创建一个颜色(浅蓝色)
+$f=imagecolorallocate($db,255,255,255);//创建文字颜色（白色）
+$str="1234567890";//填写的字符串(内容)
+$s='';
+for($i=0;$i<4;$i++)//创建随机4位数
+{
+  $k=mt_rand(1,strlen($str));
+  $s.=$str[$k-1];
+}
+session_start();
+$_SESSION['code']=$s;
+imagefill($db,0,0,$b); //给图片填颜色
+imagestring($db,5,5,5,$s,$f);//给图片填数字
+header("content-type:image/png");
+imagepng($db);
+
+$username=$_SESSION['username'];
+if(!$username)
+{
+ echo "<script>alert('禁止非法访问');location.href='index.php';</script>";
+ exit;
+}
+
+?>
+
+28.php输出excel或者cvs格式
+1）定义header（）头部输出格式
+header('content-type:application/vnd.ms-excel');//定义输出文件类型
+header('content-disposition:filename=hello.xls');//命名文件
+2) \t \n 填充空白和换行;
+常用table,font标签规范
+
+29.Ajax+PHP
+
+js代码：xmlHttp=new XMLHttpRequest();//标准实例化
+xmlHttp=new ActiveXObject('Microsoft.XMLHTTP');//为IE做适配而实例化
+打开请求：
+XMLHttpRequesdt.open(传递方式，地址，是否异步请求);
+准备就绪执行
+XMLHttpRequest.onreadystatechange
+获取执行结果
+XMLHttpRequest.responseText
+ 
+30.php魔术变量
+__LINE__//输出在哪一行
+__FILE__//输出文件位置
+__DIR__//文件所在目录
+__FUNCTION__//输出函数名
+__CLASS__//输出类名
+
+
