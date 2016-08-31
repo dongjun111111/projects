@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>go-iterator</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style type="text/css"> 
+/* GitHub stylesheet for MarkdownPad (http://markdownpad.com) */
+/* Author: Nicolas Hery - http://nicolashery.com */
+/* Version: b13fe65ca28d2e568c6ed5d7f06581183df8f2ff */
+/* Source: https://github.com/nicolahery/markdownpad-github */
+ 
+/* RESET
+=============================================================================*/
+ 
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+ 
+/* BODY
+=============================================================================*/
+ 
+body {
+  font-family: Helvetica, arial, freesans, clean, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  padding: 20px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+ 
+body>*:first-child {
+  margin-top: 0 !important;
+}
+ 
+body>*:last-child {
+  margin-bottom: 0 !important;
+}
+ 
+/* BLOCKS
+=============================================================================*/
+ 
+p, blockquote, ul, ol, dl, table, pre {
+  margin: 15px 0;
+}
+ 
+/* HEADERS
+=============================================================================*/
+ 
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+}
+ 
+h1 tt, h1 code, h2 tt, h2 code, h3 tt, h3 code, h4 tt, h4 code, h5 tt, h5 code, h6 tt, h6 code {
+  font-size: inherit;
+}
+ 
+h1 {
+  font-size: 28px;
+  color: #000;
+}
+ 
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #ccc;
+  color: #000;
+}
+ 
+h3 {
+  font-size: 18px;
+}
+ 
+h4 {
+  font-size: 16px;
+}
+ 
+h5 {
+  font-size: 14px;
+}
+ 
+h6 {
+  color: #777;
+  font-size: 14px;
+}
+ 
+body>h2:first-child, body>h1:first-child, body>h1:first-child+h2, body>h3:first-child, body>h4:first-child, body>h5:first-child, body>h6:first-child {
+  margin-top: 0;
+  padding-top: 0;
+}
+ 
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0;
+}
+ 
+h1+p, h2+p, h3+p, h4+p, h5+p, h6+p {
+  margin-top: 10px;
+}
+ 
+/* LINKS
+=============================================================================*/
+ 
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+ 
+a:hover {
+  text-decoration: underline;
+}
+ 
+/* LISTS
+=============================================================================*/
+ 
+ul, ol {
+  padding-left: 30px;
+}
+ 
+ul li > :first-child, 
+ol li > :first-child, 
+ul li ul:first-of-type, 
+ol li ol:first-of-type, 
+ul li ol:first-of-type, 
+ol li ul:first-of-type {
+  margin-top: 0px;
+}
+ 
+ul ul, ul ol, ol ol, ol ul {
+  margin-bottom: 0;
+}
+ 
+dl {
+  padding: 0;
+}
+ 
+dl dt {
+  font-size: 14px;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0;
+  margin: 15px 0 5px;
+}
+ 
+dl dt:first-child {
+  padding: 0;
+}
+ 
+dl dt>:first-child {
+  margin-top: 0px;
+}
+ 
+dl dt>:last-child {
+  margin-bottom: 0px;
+}
+ 
+dl dd {
+  margin: 0 0 15px;
+  padding: 0 15px;
+}
+ 
+dl dd>:first-child {
+  margin-top: 0px;
+}
+ 
+dl dd>:last-child {
+  margin-bottom: 0px;
+}
+ 
+/* CODE
+=============================================================================*/
+ 
+pre, code, tt {
+  font-size: 12px;
+  font-family: Consolas, "Liberation Mono", Courier, monospace;
+}
+ 
+code, tt {
+  margin: 0 0px;
+  padding: 0px 0px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px;
+}
+ 
+pre>code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent;
+}
+ 
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+ 
+pre code, pre tt {
+  background-color: transparent;
+  border: none;
+}
+ 
+kbd {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #DDDDDD;
+    background-image: linear-gradient(#F1F1F1, #DDDDDD);
+    background-repeat: repeat-x;
+    border-color: #DDDDDD #CCCCCC #CCCCCC #DDDDDD;
+    border-image: none;
+    border-radius: 2px 2px 2px 2px;
+    border-style: solid;
+    border-width: 1px;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 10px;
+    padding: 1px 4px;
+}
+ 
+/* QUOTES
+=============================================================================*/
+ 
+blockquote {
+  border-left: 4px solid #DDD;
+  padding: 0 15px;
+  color: #777;
+}
+ 
+blockquote>:first-child {
+  margin-top: 0px;
+}
+ 
+blockquote>:last-child {
+  margin-bottom: 0px;
+}
+ 
+/* HORIZONTAL RULES
+=============================================================================*/
+ 
+hr {
+  clear: both;
+  margin: 15px 0;
+  height: 0px;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  border-bottom: 4px solid #ddd;
+  padding: 0;
+}
+ 
+/* TABLES
+=============================================================================*/
+ 
+table th {
+  font-weight: bold;
+}
+ 
+table th, table td {
+  border: 1px solid #ccc;
+  padding: 6px 13px;
+}
+ 
+table tr {
+  border-top: 1px solid #ccc;
+  background-color: #fff;
+}
+ 
+table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+ 
+/* IMAGES
+=============================================================================*/
+ 
+img {
+  max-width: 100%
+}
+</style>
+<base href='file:\\\D:\gopath\src\blog\posts\'/>
+</head>
+<body>
+<h2>关于“Go语言设计模式”系列</h2>
+<p>这个系列首先是关于Go语言实践的。在项目中实际使用Go语言也有段时间了，一个体会就是不论是官方文档、图书还是网络资料，关于Go语言惯用法（idiom）的介绍都比较少，基本只能靠看标准库源代码自己琢磨，所以我特别想在这方面有一些收集和总结。</p>
+<p>然后这个系列也是关于设计模式的。虽然Go语言不是一门面向对象编程语言，但是很多面向对象设计模式所要解决的问题是在程序设计中客观存在的。不管用什么语言，总是要面对和解决这些问题的，只是解决的思路和途径会有所不同。所以我想就以经典的设计模式作为切入点来展开这个系列，毕竟大家对设计模式都很熟悉了，可以避免无中生有想出一些蹩脚的应用场景。</p>
+<p>本系列的具体主题会比较灵活，计划主要包括这些方面的话题：</p>
+<ol>
+<li>Go语言惯用法。  
+</li>
+<li>设计模式的实现。特别是引入了闭包，协程，DuckType等语言特性后带来的变化。  
+</li>
+<li>设计模式思想的探讨。会有一些吐槽。</li>
+</ol>
+<hr />
+<h2>不使用迭代器的方案</h2>
+<p><strong>首先要指出的是，绝大多数情况下Go程序是不需要用迭代器的。</strong>因为内置的slice和map两种容器都可以通过range进行遍历，并且这两种容器在性能方面做了足够的优化。只要没有特殊的需求，通常是直接用这两种容器解决问题。即使不得不写了一个自定义容器，我们几乎总是可以实现一个函数，把所有元素（的引用）拷贝到一个slice之后返回，这样调用者又可以直接用range进行遍历了。</p>
+<p>当然某些特殊场合迭代器还是有用武之地。比如迭代器的Next()是个耗时操作，不能一口气拷贝所有元素；再比如某些条件下需要中断遍历。</p>
+<h2>经典实现</h2>
+<p>经典实现完全采用面向对象的思路。为了简化问题，下面的例子中容器就是简单的<code>[]int</code>，我们在<code>main</code>函数中使用迭代器进行遍历操作并打印取到的值，迭代器的接口设计参考java。</p>
+<p>```
+package main</p>
+<p>import &quot;fmt&quot;</p>
+<p>type Ints []int</p>
+<p>func (i Ints) Iterator() *Iterator {
+    return &amp;Iterator{
+        data:  i,
+        index: 0,
+    }
+}</p>
+<p>type Iterator struct {
+    data  Ints
+    index int
+}</p>
+<p>func (i *Iterator) HasNext() bool {
+    return i.index &lt; len(i.data)
+}</p>
+<p>func (i *Iterator) Next() (v int) {
+    v = i.data[i.index]
+    i.index++
+    return v
+}</p>
+<p>func main() {
+    ints := Ints{1, 2, 3}
+    for it := ints.Iterator(); it.HasNext(); {
+        fmt.Println(it.Next())
+    }
+}</p>
+<p>```</p>
+<h2>闭包实现</h2>
+<p>Go语言支持first class functions、高阶函数、闭包、多返回值函数。用上这些特性可以换种方式实现迭代器。</p>
+<p>初看之下闭包实现与经典实现完全不同，其实从本质上来看，二者区别不大。经典实现中把迭代器需要的数据存在struct中，<code>HasNext()</code> <code>Next()</code>两个函数定义为<code>Iterator</code>的方法从而和数据绑定了起来；闭包实现中迭代器是一个匿名函数，它所需要的数据<code>i Ints</code>和<code>index</code>以闭包up value的形式绑定了起来，匿名函数返回的两个值正好对应经典实现中的<code>Next()</code>和<code>HasNext()</code>。</p>
+<p>```
+package main</p>
+<p>import &quot;fmt&quot;</p>
+<p>type Ints []int</p>
+<p>func (i Ints) Iterator() func() (int, bool) {
+    index := 0
+    return func() (val int, ok bool) {
+        if index &gt;= len(i) {
+            return
+        }</p>
+<pre><code>    val, ok = i[index], true
+    index++
+    return
+}
+</code></pre>
+ 
+<p>}</p>
+<p>func main() {
+    ints := Ints{1, 2, 3}
+    it := ints.Iterator()
+    for {
+        val, ok := it()
+        if !ok {
+            break
+        }
+        fmt.Println(val)
+    }
+}
+```</p>
+<h2>channel实现</h2>
+<p>这份实现是最go way的，使用了一个channel在新的goroutine中将容器内的元素依次输出。优点是channel是可以用range接收的，所以调用方代码很简洁；缺点是goroutine上下文切换会有开销，这份实现无疑是最低效的，另外调用方必须接收完所有数据，如果只接收一半就中断掉发送方将永远阻塞。</p>
+<p>依稀记得在邮件列表里看到说标准库里有这个用法的例子，刚才去翻了下没找到原帖了:-)</p>
+<p>顺便说一下，<strong>“在函数中创建一个channel返回，同时创建一个goroutine往channel中塞数据”这是一个重要的惯用法</strong>（Channel Factory pattern，见the way to go 18.8节），可以用来做<a href="http://codereview.stackexchange.com/questions/28386/fibonacci-generator-with-golang">序列发生器</a>、<a href="http://blog.golang.org/pipelines#TOC_4.">fan-out、fan-in</a>等。</p>
+<p>```
+package main</p>
+<p>import &quot;fmt&quot;</p>
+<p>type Ints []int</p>
+<p>func (i Ints) Iterator() &lt;-chan int {
+    c := make(chan int)
+    go func() {
+        for _, v := range i {
+            c &lt;- v
+        }
+        close(c)
+    }()
+    return c
+}</p>
+<p>func main() {
+    ints := Ints{1, 2, 3}
+    for v := range ints.Iterator() {
+        fmt.Println(v)
+    }
+}
+```</p>
+<h2>Do实现</h2>
+<p>这份迭代器实现是最简洁的，代码也很直白，无须多言。如果想加上中断迭代的功能，可以将<code>func(int)</code>改为<code>func(int)bool</code>，Do中根据返回值决定是否退出迭代。</p>
+<p>标准库中的<code>container/ring</code>中有Do()用法的例子。</p>
+<p>```
+package main</p>
+<p>import &quot;fmt&quot;</p>
+<p>type Ints []int</p>
+<p>func (i Ints) Do(fn func(int)) {
+    for _, v := range i {
+        fn(v)
+    }
+}</p>
+<p>func main() {
+    ints := Ints{1, 2, 3}
+    ints.Do(func(v int) {
+        fmt.Println(v)
+    })
+}
+```</p>
+<h2>总结</h2>
+<ol>
+<li>Go语言中没有class和继承，不具备完整表达面向对象的能力，不是一门通常意义上的面向对象语言。但是这不妨碍Go语言实现面向对象的思想，利用其语言特性，实现封装、组合、多态都没有问题。</li>
+<li>设计模式的精髓在于思想而不在于类图。编程语言是在不断进步的，类图却一直用几十年前那一张，抛开类图重新审视问题，合理利用语言新特性可以得到更简洁的设计模式实现。</li>
+</ol>
+ 
+</body>
+</html>
+<!-- This document was created with MarkdownPad, the Markdown editor for Windows (http://markdownpad.com) -->
+
