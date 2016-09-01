@@ -64,5 +64,5 @@ pb的message结构比较强大，最重要的是可以进行嵌套，有可选�
 
 不妨使用pb定义一个LogMessage，其中定义好可能涉及到的各种字段，如`GemCost`、`CoinCost`、`CoinGain`、`ExpGain`等，还可以嵌套复杂结构，如`FriendInfo`。各个模块记录日志时根据需要填入自己涉及到的字段即可。各种语言的pb binding都提供了`String()`函数将pb message转为格式清晰的string，转完后写入文件就得到了既清晰易读又便于统计的日志了，还可以将pb message序列化后发往远程日志收集程序，也非常方便。
 
-## 版权相关
+## 版权声明
 转载自 http://disksing.com
