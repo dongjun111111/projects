@@ -291,3 +291,6 @@ docker run -d \
   [5]: https://registry.hub.docker.com/u/jenserat/seafile/
   [6]: http://www.seafile.com/download/
   [7]: http://download-cn.seafile.com/seafile-server_4.1.2_x86-64.tar.gz
+
+## 版权相关
+转载自 http://disksing.com

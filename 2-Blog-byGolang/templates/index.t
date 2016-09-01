@@ -57,9 +57,7 @@
 	<div>
 		<h2><i class="fa fa-user"></i> 关于作者</h2>
 		<p>Jason，野生程序员一枚。</p>
-		<p>你可以通过以下各种方式找到我：</p>
-		<p>
-			<i class="fa fa-envelope-o fa-x"></i><a href="mailto:dongjun903456@163.com">Email</a>
+		<p>		
 			<i class="fa fa-github-alt fa-x"></i><a href="https://www.github.com/dongjun111111">GitHub</a>
 			<i class="fa fa-weibo fa-x"></i><a href="http://www.weibo.com/u/3164465513">Weibo</a>
 		</p>
