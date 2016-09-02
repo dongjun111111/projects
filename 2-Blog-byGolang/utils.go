@@ -7,6 +7,10 @@ import (
 	"time"
 )
 
+const (
+	MAXLOGFILES = 7
+)
+
 func writeMainLogToFile(vals []string, outfile string) error {
 	today := time.Now().Format("2006-01-02")
 	if strings.Contains(outfile, today) {
@@ -46,8 +50,8 @@ func checkLog(logname string) {
 		}
 		return err
 	})
-	if i > 7 {
-		delpathslice := pathslice[:len(pathslice)-7]
+	if i > MAXLOGFILES {
+		delpathslice := pathslice[:len(pathslice)-MAXLOGFILES]
 		for i := 0; i < len(delpathslice); i++ {
 			err := os.RemoveAll(delpathslice[i])
 			if err != nil {
