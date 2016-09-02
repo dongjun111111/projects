@@ -34,7 +34,6 @@
 <div class="container">
 	<header>
 		<h1> Jason's Home </h1>
-		<p>The Best Or Nothing</p>
 	</header>
 
 	{{range .}}
