@@ -2,12 +2,11 @@ package main
 
 import (
 	"bytes"
+	"github.com/huangml/log"
 	"net/http"
 	"os"
 	"path/filepath"
 	"text/template"
-
-	"github.com/huangml/log"
 )
 
 var t *template.Template
@@ -73,18 +72,17 @@ func build() {
 }
 
 func serv() {
-
 	os.Mkdir("log", 0644)
 	log.SetStatFilePath("log")
 
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
-
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if b, ok := pages[r.RequestURI]; ok {
 			w.Write(b.Bytes())
 		} else {
 			http.NotFound(w, r)
 		}
+		log.Info("正在请求的路由: ", r.RequestURI, " ; 远程IP: ", r.RemoteAddr)
 	})
 	log.Info("Working at port:2333")
 	http.ListenAndServe(":2333", nil)
