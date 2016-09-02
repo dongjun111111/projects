@@ -20,7 +20,7 @@ func writeResult(vals []string, outfile string) error {
 	defer f.Close()
 
 	for _, v := range vals {
-		v = time.Now().Format("2006-01-02 15:04:05") + "   " + v
+		v = "Time: " + time.Now().Format("2006-01-02 15:04:05") + "   " + v
 		f.WriteString(v)
 		f.WriteString("\r\n")
 	}
