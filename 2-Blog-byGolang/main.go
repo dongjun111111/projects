@@ -74,7 +74,7 @@ func build() {
 func serv() {
 	os.Mkdir("log", 0644)
 	log.SetStatFilePath("log")
-	MainLogfile := "log/log.log"
+	MainLogfile := "log/mainlog.log"
 
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
