@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func writeResult(vals []string, outfile string) error {
+func writeMainLogToFile(vals []string, outfile string) error {
 	_, err := os.Open(outfile)
 	if err != nil && os.IsNotExist(err) {
 		_, err := os.Create(outfile)

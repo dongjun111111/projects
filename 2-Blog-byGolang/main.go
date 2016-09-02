@@ -84,7 +84,7 @@ func serv() {
 			http.NotFound(w, r)
 		}
 		log.Info("IP: ", r.RemoteAddr, " ; Router: ", r.RequestURI)
-		writeResult([]string{"IP: " + r.RemoteAddr + " ; Router: " + r.RequestURI}, MainLogfile)
+		writeMainLogToFile([]string{"IP: " + r.RemoteAddr + " ; Router: " + r.RequestURI}, MainLogfile)
 	})
 	log.Info("Working at port:2333")
 	http.ListenAndServe(":2333", nil)
