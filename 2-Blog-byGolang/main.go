@@ -74,6 +74,7 @@ func build() {
 func serv() {
 	os.Mkdir("log", 0644)
 	log.SetStatFilePath("log")
+	MainLogfile := "log/log.log"
 
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -82,7 +83,8 @@ func serv() {
 		} else {
 			http.NotFound(w, r)
 		}
-		log.Info("正在请求的路由: ", r.RequestURI, " ; 远程IP: ", r.RemoteAddr)
+		log.Info("远程IP: ", r.RemoteAddr, " ; 正在请求的路由: ", r.RequestURI)
+		writeResult([]string{"远程IP: " + r.RemoteAddr + " ; 正在请求的路由: " + r.RequestURI}, MainLogfile)
 	})
 	log.Info("Working at port:2333")
 	http.ListenAndServe(":2333", nil)
