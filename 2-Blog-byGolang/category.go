@@ -22,7 +22,7 @@ var categories []*Category
 func parseCategories() {
 	log.Info("Parse Categories")
 
-	f, err := os.OpenFile("posts/category.conf", os.O_RDONLY, 0777)
+	f, err := os.OpenFile("conf/category.conf", os.O_RDONLY, 0777)
 	log.FatalOnError(err)
 	defer f.Close()
 
