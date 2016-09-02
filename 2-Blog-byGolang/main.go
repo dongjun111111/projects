@@ -84,6 +84,7 @@ func serv() {
 			http.NotFound(w, r)
 		}
 		log.Info("IP: ", r.RemoteAddr, " ; Router: ", r.RequestURI)
+		checkLog("mainlog.log")
 		today := time.Now().Format("2006-01-02")
 		MainLogfile := "log/" + today + "mainlog.log"
 		writeMainLogToFile([]string{"IP: " + r.RemoteAddr + " ; Router: " + r.RequestURI + " ; UA: " + r.UserAgent()}, MainLogfile)
