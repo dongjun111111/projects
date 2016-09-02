@@ -86,5 +86,6 @@ func serv() {
 			http.NotFound(w, r)
 		}
 	})
+	log.Info("Working at port:2333")
 	http.ListenAndServe(":2333", nil)
 }
