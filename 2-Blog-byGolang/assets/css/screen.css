@@ -1,3 +1,11 @@
+/* latin */
+@font-face {
+  font-family: 'Satisfy';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Satisfy'), url(ch7X2unYkww0EzsjlC3m8w.woff) format('woff');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
 html {
   font-size:75%;
 }
@@ -163,4 +171,7 @@ footer {
   font-size: 0.7em;
   font-weight: lighter;
   color:grey;
+}
+.maintitle {
+   font-family:'Satisfy', sans-serif;
 }
