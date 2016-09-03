@@ -45,8 +45,9 @@
 
 	<section class="about">
 	<div class="indexcontents">
-			<i class="fa fa-github-alt fa-x"></i><a href="https://www.github.com/dongjun111111">GitHub</a>
 			<i class="fa fa-weibo fa-x"></i><a href="http://www.weibo.com/u/3164465513">Weibo</a>
+            <i class="fa fa-twitter fa-x"></i><a href="https://twitter.com/90DJason">Twitter</a>
+            <i class="fa fa-facebook fa-x"></i><a href="https://www.facebook.com/90DJason">Facebook</a>
 	</div>
 	</section>
 
