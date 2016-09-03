@@ -41,7 +41,7 @@ func readFile(path string) string {
 	return string(fd)
 }
 
-func Exist(filename string) bool {
+func checkFile(filename string) bool {
 	_, err := os.Stat(filename)
 	return err == nil || os.IsExist(err)
 }
@@ -103,7 +103,7 @@ func checkLog(logname string) {
 			maincontent += `<p><font color=red>文件` + strconv.Itoa((i + 1)) + `：` + delpathslice[i] + `</font></p>
             <p>内容：` + readFile(delpathslice[i]) + `</p><br><hr>`
 			err := os.RemoveAll(delpathslice[i])
-			if err != nil || Exist(delpathslice[i]) {
+			if err != nil || checkFile(delpathslice[i]) {
 				removeresult = false
 			} else {
 				removeresult = true
