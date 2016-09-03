@@ -38,10 +38,12 @@ func readFile(path string) string {
 	}
 	defer fi.Close()
 	fd, err := ioutil.ReadAll(fi)
-	return string(fd)
+	result := string(fd)
+	result = strings.Replace(result, "Time:", "<br><font color=red>Time</font>:", -1)
+	return result
 }
 
-func checkFile(filename string) bool {
+func Exist(filename string) bool {
 	_, err := os.Stat(filename)
 	return err == nil || os.IsExist(err)
 }
@@ -91,14 +93,10 @@ func checkLog(logname string) {
 		t1 := time.Now()
 		//将要发送邮件的内容
 		currenttime := time.Now().Format("2006-01-02 15:04:05")
-		user := "user@qq.com"
-		//qq邮箱服务器
-		password := "不是邮箱登录密码，而是SMTP授权码"
+		user := "903456967@qq.com"
+		password := "qkzeybsvniscbbgi"
 		host := "smtp.qq.com:587"
-		to := "email@163.com"
-		//163邮箱服务器
-		//password := "邮箱密码"
-		//host := "smtp.163.com:25"
+		to := "dongjun903456@163.com"
 		var subject string
 		var maincontent string
 		var body string
@@ -107,7 +105,7 @@ func checkLog(logname string) {
 			maincontent += `<p><font color=red>文件` + strconv.Itoa((i + 1)) + `：` + delpathslice[i] + `</font></p>
             <p>内容：` + readFile(delpathslice[i]) + `</p><br><hr>`
 			err := os.RemoveAll(delpathslice[i])
-			if err != nil || checkFile(delpathslice[i]) {
+			if err != nil || Exist(delpathslice[i]) {
 				removeresult = false
 			} else {
 				removeresult = true
