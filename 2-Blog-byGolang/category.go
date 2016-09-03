@@ -62,7 +62,7 @@ func addPostToCategory(p *Post) {
 			return
 		}
 		c.Numbers = len(c.Posts)
-		//让文章数小于等于0的分类不显示
+		//当出现文章数小于等于0的分类时令其不显示
 		// if len(c.Posts) <= 0 {
 		// 	categories = append(categories[:k], categories[k+1:]...)
 		// }
