@@ -132,12 +132,12 @@ func checkLog(logname string) {
             </html>
             `
 		} else {
-			subject = "博客冗余日志文件删除失败通知！！！"
+			subject = "警告！日志删除失败！！！"
 			body = `
             <html>
             <body>
                 <h3><font color=red>日志文件删除失败</font></h3>
-                <p>请尽快登录后台排查问题，以防影响服务器正常工作！</p>
+                <p>请尽快登录后台排查问题，以防影响服务器正常工作！</p><hr>
                 <p>` + currenttime + ` - by system</p>
             </body>
             </html>
