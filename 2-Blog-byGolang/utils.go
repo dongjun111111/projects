@@ -1,9 +1,12 @@
 package main
 
 import (
+	"fmt"
+	"io/ioutil"
 	"net/smtp"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -28,6 +31,15 @@ func sendMail(user, password, host, to, subject, body, mailtype string) error {
 	return err
 }
 
+func readFile(path string) string {
+	fi, err := os.Open(path)
+	if err != nil {
+		panic(err)
+	}
+	defer fi.Close()
+	fd, err := ioutil.ReadAll(fi)
+	return string(fd)
+}
 func writeMainLogToFile(vals []string, outfile string) error {
 	today := time.Now().Format("2006-01-02")
 	if strings.Contains(outfile, today) {
@@ -69,25 +81,18 @@ func checkLog(logname string) {
 	})
 	if i > MAXLOGFILES {
 		delpathslice := pathslice[:len(pathslice)-MAXLOGFILES]
-		for i := 0; i < len(delpathslice); i++ {
-			err := os.RemoveAll(delpathslice[i])
-			if err != nil {
-				println("delet dir error:", err)
-				return
-			}
-			println(delpathslice[i], "--->删除成功")
-		}
 
 		//将要发送邮件的内容
 		currenttime := time.Now().Format("2006-01-02 15:04:05")
 		user := "user@163.com"
-		password := "pop3pwd"
+		password := "pop3-pwd"
 		host := "smtp.163.com:25"
-		to := "email@qq.com"
+		to := "to@qq.com"
 		subject := "博客冗余日志文件删除通知"
-		var delpathstring string
+		var maincontent string
 		for i := 0; i < len(delpathslice); i++ {
-			delpathstring += delpathslice[i] + "<br>"
+			maincontent += `<p><font color=red>文件` + strconv.Itoa((i + 1)) + `：` + delpathslice[i] + `</font></p>
+            <p>内容：` + readFile(delpathslice[i]) + `</p><br><hr>`
 		}
 		body := `
             <html>
@@ -95,9 +100,9 @@ func checkLog(logname string) {
             <h3>
             日志文件删除通知!
             </h3>
-            <p>以下文件被删除：</p>
-            <p>` + delpathstring + `</p>
-            <p>` + currenttime + `</p>
+            <p>以下共` + strconv.Itoa(len(delpathslice)) + `个文件已被删除：</p><hr>
+            ` + maincontent + `
+            <p>` + currenttime + ` - by system</p>
             </body>
             </html>
             `
@@ -108,6 +113,17 @@ func checkLog(logname string) {
 			println(err1)
 		} else {
 			println("sended mail success!")
+			t1 := time.Now()
+			for i := 0; i < len(delpathslice); i++ {
+				err := os.RemoveAll(delpathslice[i])
+				if err != nil {
+					println("delet dir error:", err)
+					return
+				}
+				println(delpathslice[i], "--->删除成功")
+			}
+			t2 := time.Now()
+			fmt.Printf("删除文件总用时： %v\n", t2.Sub(t1))
 		}
 	}
 }
