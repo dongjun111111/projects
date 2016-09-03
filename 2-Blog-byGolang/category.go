@@ -54,7 +54,7 @@ func addPostToCategory(p *Post) {
 				return
 			}
 			c.Posts = append(c.Posts, p)
-			//如果该分类下文章数超过6，就进行截断处理
+			//如果该分类下文章数超过6，对其进行截断处理
 			// if len(c.Posts) > 6 {
 			// 	c.Posts = c.Posts[:6]
 			// 	c.Readmore = true
