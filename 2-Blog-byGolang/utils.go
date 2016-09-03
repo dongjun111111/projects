@@ -107,7 +107,7 @@ func checkLog(logname string) {
 		var body string
 		var removeresult bool
 		for i := 0; i < len(delpathslice); i++ {
-			maincontent += `<p><font color=red>文件` + strconv.Itoa((i + 1)) + `：` + delpathslice[i] + `</font></p>
+			maincontent += `<p>文件` + strconv.Itoa((i + 1)) + `：<font color=red>` + delpathslice[i] + `</font></p>
             <p>内容：` + readFile(delpathslice[i]) + `</p><br><hr>`
 			err := os.RemoveAll(delpathslice[i])
 			if err != nil || Exist(delpathslice[i]) {
