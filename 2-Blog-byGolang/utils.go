@@ -93,10 +93,14 @@ func checkLog(logname string) {
 		t1 := time.Now()
 		//将要发送邮件的内容
 		currenttime := time.Now().Format("2006-01-02 15:04:05")
-		user := "903456967@qq.com"
-		password := "qkzeybsvniscbbgi"
+		user := "user@qq.com"
+		//qq邮箱服务器
+		password := "smtp授权密码"
 		host := "smtp.qq.com:587"
-		to := "dongjun903456@163.com"
+		//163邮箱服务器
+		//password :="登录密码"
+		//host := "smtp.163.com:25"
+		to := "to@163.com"
 		var subject string
 		var maincontent string
 		var body string
