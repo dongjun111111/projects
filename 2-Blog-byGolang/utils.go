@@ -40,7 +40,13 @@ func readFile(path string) string {
 	fd, err := ioutil.ReadAll(fi)
 	return string(fd)
 }
-func writeMainLogToFile(vals []string, outfile string) error {
+
+func Exist(filename string) bool {
+	_, err := os.Stat(filename)
+	return err == nil || os.IsExist(err)
+}
+
+func writeLogToFile(vals []string, outfile string) error {
 	today := time.Now().Format("2006-01-02")
 	if strings.Contains(outfile, today) {
 		_, err := os.Open(outfile)
@@ -82,19 +88,31 @@ func checkLog(logname string) {
 	if i > MAXLOGFILES {
 		delpathslice := pathslice[:len(pathslice)-MAXLOGFILES]
 
+		t1 := time.Now()
 		//将要发送邮件的内容
 		currenttime := time.Now().Format("2006-01-02 15:04:05")
 		user := "user@163.com"
 		password := "pop3-pwd"
 		host := "smtp.163.com:25"
-		to := "to@qq.com"
-		subject := "博客冗余日志文件删除通知"
+		to := "email@qq.com"
+		var subject string
 		var maincontent string
+		var body string
+		var removeresult bool
 		for i := 0; i < len(delpathslice); i++ {
 			maincontent += `<p><font color=red>文件` + strconv.Itoa((i + 1)) + `：` + delpathslice[i] + `</font></p>
             <p>内容：` + readFile(delpathslice[i]) + `</p><br><hr>`
+			err := os.RemoveAll(delpathslice[i])
+			if err != nil || Exist(delpathslice[i]) {
+				removeresult = false
+			} else {
+				removeresult = true
+				println(delpathslice[i], "--->删除成功")
+			}
 		}
-		body := `
+		if removeresult {
+			subject = "博客冗余日志文件成功删除通知"
+			body = `
             <html>
             <body>
             <h3>
@@ -106,23 +124,29 @@ func checkLog(logname string) {
             </body>
             </html>
             `
+		} else {
+			subject = "博客冗余日志文件删除失败通知！！！"
+			body = `
+            <html>
+            <body>
+                <h3><font color=red>日志文件删除失败</font></h3>
+                <p>请尽快登录后台排查问题，以防影响服务器正常工作！</p>
+                <p>` + currenttime + ` - by system</p>
+            </body>
+            </html>
+            `
+		}
+		t2 := time.Now()
+
 		println("sending email......")
 		err1 := sendMail(user, password, host, to, subject, body, "html")
 		if err1 != nil {
 			println("sended mail error!")
-			println(err1)
+			today := time.Now().Format("2006-01-02")
+			MailErrorLogfile := "log/" + today + "mailerrorlog.log"
+			writeLogToFile([]string{" - 邮件发送失败，请检查邮件账号信息！"}, MailErrorLogfile)
 		} else {
 			println("sended mail success!")
-			t1 := time.Now()
-			for i := 0; i < len(delpathslice); i++ {
-				err := os.RemoveAll(delpathslice[i])
-				if err != nil {
-					println("delet dir error:", err)
-					return
-				}
-				println(delpathslice[i], "--->删除成功")
-			}
-			t2 := time.Now()
 			fmt.Printf("删除文件总用时： %v\n", t2.Sub(t1))
 		}
 	}
