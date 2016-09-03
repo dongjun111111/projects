@@ -15,7 +15,7 @@ const (
 	MAXLOGFILES = 7
 )
 
-func sendMail(user, password, host, to, subject, body, mailtype string) error {
+func sendMail(username, user, password, host, to, subject, body, mailtype string) error {
 	hp := strings.Split(host, ":")
 	auth := smtp.PlainAuth("", user, password, hp[0])
 	var content_type string
@@ -25,7 +25,7 @@ func sendMail(user, password, host, to, subject, body, mailtype string) error {
 		content_type = "Content-Type: text/plain" + "; charset=UTF-8;"
 	}
 
-	msg := []byte("To: " + to + "\r\nFrom: " + user + "<" + user + ">\r\nSubject: " + subject + "\r\n" + content_type + "\r\n" + body)
+	msg := []byte("To: " + to + "\r\nFrom: " + username + "<" + user + ">\r\nSubject: " + subject + "\r\n" + content_type + "\r\n" + body + "\r\n REPLY-TO: " + user)
 	send_to := strings.Split(to, ";")
 	err := smtp.SendMail(host, auth, user, send_to, msg)
 	return err
@@ -93,6 +93,7 @@ func checkLog(logname string) {
 		t1 := time.Now()
 		//将要发送邮件的内容
 		currenttime := time.Now().Format("2006-01-02 15:04:05")
+		username := "博客后台小管家"
 		user := "user@qq.com"
 		//qq邮箱服务器
 		password := "smtp授权密码"
@@ -145,7 +146,7 @@ func checkLog(logname string) {
 		t2 := time.Now()
 
 		println("sending email......")
-		err1 := sendMail(user, password, host, to, subject, body, "html")
+		err1 := sendMail(username, user, password, host, to, subject, body, "html")
 		if err1 != nil {
 			println("sended mail error!")
 			today := time.Now().Format("2006-01-02")
