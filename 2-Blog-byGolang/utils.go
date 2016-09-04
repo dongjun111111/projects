@@ -42,20 +42,21 @@ func getAddr() string { //get ip
 	defer conn.Close()
 	return strings.Split(conn.LocalAddr().String(), ":")[0]
 }
+
 func getMac() string { // get local connection infos
 	interfaces, err := net.Interfaces()
 	if err != nil {
-		return " ; 本地连接信息获取失败！"
+		return " ; 网络连接信息获取失败！"
 	}
 	var macs string
 	for _, inter := range interfaces {
 		mac := inter.HardwareAddr
 		addrs, _ := inter.Addrs()
 		if strings.Contains(inter.Name, "本地") || strings.Contains(inter.Name, "eth0") || strings.EqualFold(inter.Name, "Local") {
-			macs = " ; 本地连接Name: " + inter.Name + " ; 本地连接Addr: " + fmt.Sprintf("%s", addrs) + "  ; MAC: " + fmt.Sprintf("%s", mac)
+			macs = " ; 网络连接Name: " + inter.Name + " ; 网络连接Addr: " + fmt.Sprintf("%s", addrs) + "  ; MAC: " + fmt.Sprintf("%s", mac)
 			break
 		}
-		macs = " ; 本地连接Name: " + inter.Name + " ; 本地连接Addr: " + fmt.Sprintf("%s", addrs) + "  ; MAC: " + fmt.Sprintf("%s", mac)
+		macs = " ; 网络连接Name: " + inter.Name + " ; 网络连接Addr: " + fmt.Sprintf("%s", addrs) + "  ; MAC: " + fmt.Sprintf("%s", mac)
 	}
 	return macs
 }
