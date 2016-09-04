@@ -1,8 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"net"
 	"net/smtp"
 	"os"
 	"path/filepath"
@@ -29,6 +31,28 @@ func sendMail(username, user, password, host, to, subject, body, mailtype string
 	send_to := strings.Split(to, ";")
 	err := smtp.SendMail(host, auth, user, send_to, msg)
 	return err
+}
+
+func getAddr() string { //Get ip
+	conn, err := net.Dial("udp", "baidu.com:80")
+	if err != nil {
+		fmt.Println(err.Error())
+		return "Erorr"
+	}
+	defer conn.Close()
+	return strings.Split(conn.LocalAddr().String(), ":")[0]
+}
+func getMac() string { // get mac[0]
+	interfaces, err := net.Interfaces()
+	if err != nil {
+		return "MAC地址获取失败"
+	}
+	return fmt.Sprintf("%s", interfaces[0].HardwareAddr)
+}
+
+func toString(v interface{}) string {
+	data, _ := json.Marshal(v)
+	return string(data)
 }
 
 func readFile(path string) string {
@@ -134,14 +158,14 @@ func checkLog(logname string) {
 		} else {
 			subject = "警告！日志删除失败！！！"
 			body = `
-            <html>
-            <body>
-                <h3><font color=red>日志文件删除失败</font></h3>
-                <p>请尽快登录后台排查问题，以防影响服务器正常工作！</p><hr>
-                <p>` + currenttime + ` - by system</p>
-            </body>
-            </html>
-            `
+			<html>
+			<body>
+				<h3><font color=red>日志文件删除失败</font></h3>
+				<p>请尽快登录后台排查问题，以防影响服务器正常工作！</p><hr>
+				<p>` + currenttime + ` - by system</p>
+			</body>
+			</html>
+			`
 		}
 		t2 := time.Now()
 
