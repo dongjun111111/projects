@@ -33,7 +33,7 @@ func sendMail(username, user, password, host, to, subject, body, mailtype string
 	return err
 }
 
-func getAddr() string { //Get ip
+func getAddr() string { //get ip
 	conn, err := net.Dial("udp", "baidu.com:80")
 	if err != nil {
 		fmt.Println(err.Error())
@@ -42,12 +42,22 @@ func getAddr() string { //Get ip
 	defer conn.Close()
 	return strings.Split(conn.LocalAddr().String(), ":")[0]
 }
-func getMac() string { // get mac[0]
+func getMac() string { // get local connection infos
 	interfaces, err := net.Interfaces()
 	if err != nil {
-		return "MAC地址获取失败"
+		return " ; 本地连接信息获取失败！"
 	}
-	return fmt.Sprintf("%s", interfaces[0].HardwareAddr)
+	var macs string
+	for _, inter := range interfaces {
+		mac := inter.HardwareAddr
+		addrs, _ := inter.Addrs()
+		if strings.Contains(inter.Name, "本地") || strings.Contains(inter.Name, "eth0") || strings.EqualFold(inter.Name, "Local") {
+			macs = " ; 本地连接Name: " + inter.Name + " ; 本地连接Addr: " + fmt.Sprintf("%s", addrs) + "  ; MAC: " + fmt.Sprintf("%s", mac)
+			break
+		}
+		macs = " ; 本地连接Name: " + inter.Name + " ; 本地连接Addr: " + fmt.Sprintf("%s", addrs) + "  ; MAC: " + fmt.Sprintf("%s", mac)
+	}
+	return macs
 }
 
 func toString(v interface{}) string {

@@ -83,11 +83,11 @@ func serv() {
 		} else {
 			http.NotFound(w, r)
 		}
-		log.Info("RemoteAddr: ", r.RemoteAddr, " ; LocalAddr: ", getAddr(), " ; MAC: "+getMac(), " ; Router: ", r.RequestURI)
+		log.Info("RemoteAddr: ", r.RemoteAddr, " ; LocalAddr: ", getAddr(), getMac(), " ; Router: ", r.RequestURI)
 		checkLog("mainlog.log")
 		today := time.Now().Format("2006-01-02")
 		MainLogfile := "log/" + today + "mainlog.log"
-		writeLogToFile([]string{"RemoteAddr: " + r.RemoteAddr + " ; LocalAddr: " + getAddr() + " ; MAC: " + getMac() + " ; Router: " + r.RequestURI + " ; From: " + r.Referer() + " ; UA: " + r.UserAgent()}, MainLogfile)
+		writeLogToFile([]string{"RemoteAddr: " + r.RemoteAddr + " ; LocalAddr: " + getAddr() + getMac() + " ; Router: " + r.RequestURI + " ; From: " + r.Referer() + " ; UA: " + r.UserAgent()}, MainLogfile)
 	})
 	log.Info("Working at port:2333")
 	http.ListenAndServe(":2333", nil)
