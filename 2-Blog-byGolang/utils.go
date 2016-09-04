@@ -141,7 +141,10 @@ func checkLog(logname string) {
 		var maincontent string
 		var body string
 		var removeresult bool
+		var counts int
+		counts = 0
 		for i := 0; i < len(delpathslice); i++ {
+			counts += strings.Count(readFile(delpathslice[i]), "Time")
 			maincontent += `<p>文件` + strconv.Itoa((i + 1)) + `：<font color=red>` + delpathslice[i] + `</font></p>
             <p>内容：` + readFile(delpathslice[i]) + `</p><br><hr>`
 			err := os.RemoveAll(delpathslice[i])
@@ -160,7 +163,7 @@ func checkLog(logname string) {
             <h3>
             日志文件删除通知!
             </h3>
-            <p>以下共` + strconv.Itoa(len(delpathslice)) + `个文件已被删除：</p><hr>
+            <p>以下共` + strconv.Itoa(len(delpathslice)) + `个文件已被删除，主要页面共计被访问` + strconv.Itoa(counts) + `次：</p><hr>
             ` + maincontent + `
             <p>` + currenttime + ` - by system</p>
             </body>
@@ -169,14 +172,14 @@ func checkLog(logname string) {
 		} else {
 			subject = "警告！日志删除失败！！！"
 			body = `
-			<html>
-			<body>
-				<h3><font color=red>日志文件删除失败</font></h3>
-				<p>请尽快登录后台排查问题，以防影响服务器正常工作！</p><hr>
-				<p>` + currenttime + ` - by system</p>
-			</body>
-			</html>
-			`
+            <html>
+            <body>
+                <h3><font color=red>日志文件删除失败</font></h3>
+                <p>请尽快登录后台排查问题，以防影响服务器正常工作！</p><hr>
+                <p>` + currenttime + ` - by system</p>
+            </body>
+            </html>
+            `
 		}
 		t2 := time.Now()
 
