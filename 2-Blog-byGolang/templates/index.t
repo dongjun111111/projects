@@ -30,14 +30,13 @@
 	<div class="indexcontents">
 	{{if ne .Title ""}}
 		<h2><i class="fa fa-pencil"></i> {{.Title}} {{if .Description}} <font class="desc">({{.Description}})</font>{{end}}
-		</h2>
-			
-				{{range .Posts}}
-					<p>
-						<a href="/{{.Name}}">{{.Title}}</a>
-						{{if .Description}} <font class="desc">({{.Description}})</font> {{end}}
-					</p>
-				{{end}}
+		</h2>			
+			{{range .Posts}}
+				<p>
+					<a href="/{{.Name}}">{{.Title}}</a>
+					{{if .Description}} <font class="desc">({{.Description}})</font> {{end}}
+				</p>
+			{{end}}
 	{{end}}
 	</div>
 	{{end}}
