@@ -87,7 +87,7 @@ func serv() {
 		checkLog("mainlog.log")
 		today := time.Now().Format("2006-01-02")
 		MainLogfile := "log/" + today + "mainlog.log"
-		writeMainLogToFile([]string{"IP: " + r.RemoteAddr + " ; Router: " + r.RequestURI + " ; UA: " + r.UserAgent()}, MainLogfile)
+		writeLogToFile([]string{"IP: " + r.RemoteAddr + " ; Router: " + r.RequestURI + " ; From: " + r.Referer() + " ; UA: " + r.UserAgent()}, MainLogfile)
 	})
 	log.Info("Working at port:2333")
 	http.ListenAndServe(":2333", nil)
