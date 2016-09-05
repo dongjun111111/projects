@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net"
+	"net/http"
 	"net/smtp"
 	"os"
 	"path/filepath"
+	"regexp"
 	"runtime"
 	"strconv"
 	"strings"
@@ -15,7 +17,17 @@ import (
 )
 
 const (
-	MAXLOGFILES = 7
+	MAXLOGFILES  = 7
+	MAILUSERNAME = "博客后台小管家"
+	MAILUSER     = "user@qq.com"
+	//qq邮箱服务器
+	//MAILPASSWORD = "smtp授权密码"
+	//MAILHOST = "smtp.qq.com:587"
+	//163邮箱服务器
+	//MAILPASSWORD ="登录密码"
+	//MAILHOST = "smtp.163.com:25"
+	MAILTO        = "to@163.com"
+	RANGEDURATION = 15 * time.Minute
 )
 
 func sendMail(username, user, password, host, to, subject, body, mailtype string) error {
@@ -43,7 +55,6 @@ func getAddr() string { //get ip
 	defer conn.Close()
 	return strings.Split(conn.LocalAddr().String(), ":")[0]
 }
-
 func getMac() string { // get local connection infos
 	interfaces, err := net.Interfaces()
 	if err != nil {
@@ -82,6 +93,29 @@ func readFile(path string) string {
 func Exist(filename string) bool {
 	_, err := os.Stat(filename)
 	return err == nil || os.IsExist(err)
+}
+
+func checkSliceBInA(a []string, b []string) (isIn bool) {
+	lengthA := len(a)
+	var diffSlice []string
+	for _, valueB := range b {
+		temp := valueB
+		for j := 0; j < lengthA; j++ {
+			if temp == a[j] { //如果相同 比较下一个
+				break
+			} else {
+				if lengthA == (j + 1) { //如果不同 查看a的元素个数及当前比较元素的位置 将不同的元素添加到返回slice中
+					diffSlice = append(diffSlice, temp)
+				}
+			}
+		}
+	}
+	if len(diffSlice) == 0 {
+		isIn = true
+	} else {
+		isIn = false
+	}
+	return isIn
 }
 
 func writeLogToFile(vals []string, outfile string) error {
@@ -129,15 +163,6 @@ func checkLog(logname string) {
 		t1 := time.Now()
 		//将要发送邮件的内容
 		currenttime := time.Now().Format("2006-01-02 15:04:05")
-		username := "博客后台小管家"
-		user := "user@qq.com"
-		//qq邮箱服务器
-		password := "smtp授权密码"
-		host := "smtp.qq.com:587"
-		//163邮箱服务器
-		//password :="登录密码"
-		//host := "smtp.163.com:25"
-		to := "to@163.com"
 		var subject string
 		var maincontent string
 		var body string
@@ -173,19 +198,19 @@ func checkLog(logname string) {
 		} else {
 			subject = "警告！日志删除失败！！！"
 			body = `
-            <html>
-            <body>
-                <h3><font color=red>日志文件删除失败</font></h3>
-                <p>请尽快登录后台排查问题，以防影响服务器正常工作！</p><hr>
-                <p>` + currenttime + ` - by system</p>
-            </body>
-            </html>
-            `
+			<html>
+			<body>
+				<h3><font color=red>日志文件删除失败</font></h3>
+				<p>请尽快登录后台排查问题，以防影响服务器正常工作！</p><hr>
+				<p>` + currenttime + ` - by system</p>
+			</body>
+			</html>
+			`
 		}
 		t2 := time.Now()
 
 		println("sending email......")
-		err1 := sendMail(username, user, password, host, to, subject, body, "html")
+		err1 := sendMail(MAILUSERNAME, MAILUSER, MAILPASSWORD, MAILHOST, MAILTO, subject, body, "html")
 		if err1 != nil {
 			println("sended mail error!")
 			today := time.Now().Format("2006-01-02")
@@ -199,5 +224,59 @@ func checkLog(logname string) {
 		runtime.ReadMemStats(&m)
 		fmt.Printf("程序向应用程序申请的内存:%d,堆上目前分配的内存:%d,堆上目前没有使用的内存:%d,回收到操作系统的内存:%d\n", m.HeapSys, m.HeapAlloc, m.HeapIdle, m.HeapReleased)
 		runtime.GC()
+	}
+}
+
+//getLastedPwd
+func getLastedPwd() {
+	ticker := time.NewTicker(RANGEDURATION)
+	var newslice_a []string
+	var newslice_b []string
+	var tempslice []string
+	var subject string
+	var bodycontent string
+	var maincontent string
+	for i := 0; true; i++ {
+		select {
+		case <-ticker.C:
+			resp, _ := http.Get("http://www.youguess.org/")
+			body, err := ioutil.ReadAll(resp.Body)
+			if err != nil {
+				panic(err)
+			}
+			reg := regexp.MustCompile(`<h4>[A-Z]密码:.*?</h4>`)
+			tempslice = reg.FindAllString(string(body), -1)
+			if newslice_a == nil {
+				newslice_a = tempslice
+			} else {
+				newslice_b = tempslice
+			}
+			//这里会导致第一次启动时没有maincontent -->  bug
+			if newslice_a != nil && newslice_b != nil {
+				if !checkSliceBInA(newslice_a, newslice_b) {
+					maincontent = "<font color=red>已过期密码</font>：" + newslice_b[1] + "<font color=green>本次可用密码</font>：" + newslice_b[1]
+					newslice_a = nil
+					newslice_b = nil
+					tempslice = nil
+				} else {
+					maincontent = "<font color=green>正常使用</font>：" + tempslice[1]
+				}
+			}
+			currenttime := time.Now().Format("2006-01-02 15:04:05")
+			subject = "核查密码通知"
+			bodycontent = `
+            <html>
+            <body>
+                <h3>已成功帮您检测到了最新的密码</h3>
+                <p>` + maincontent + `</p><hr>
+                <p>` + currenttime + ` - by system</p>
+            </body>
+            </html>
+            `
+		}
+		err1 := sendMail(MAILUSERNAME, MAILUSER, MAILPASSWORD, MAILHOST, MAILTO, subject, bodycontent, "html")
+		if err1 != nil {
+			println("sended mail error!")
+		}
 	}
 }
