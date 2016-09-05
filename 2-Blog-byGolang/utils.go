@@ -8,6 +8,7 @@ import (
 	"net/smtp"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strconv"
 	"strings"
 	"time"
@@ -194,5 +195,9 @@ func checkLog(logname string) {
 			println("sended mail success!")
 			fmt.Printf("删除文件总用时： %v\n", t2.Sub(t1))
 		}
+		var m runtime.MemStats
+		runtime.ReadMemStats(&m)
+		fmt.Printf("程序向应用程序申请的内存:%d,堆上目前分配的内存:%d,堆上目前没有使用的内存:%d,回收到操作系统的内存:%d\n", m.HeapSys, m.HeapAlloc, m.HeapIdle, m.HeapReleased)
+		runtime.GC()
 	}
 }
