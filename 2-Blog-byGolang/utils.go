@@ -18,7 +18,7 @@ import (
 
 const (
 	MAXLOGFILES  = 7
-	MAILUSERNAME = "博客后台小管家"
+	MAILUSERNAME = "后台小管家"
 	MAILUSER     = "user@qq.com"
 	//qq邮箱服务器
 	//MAILPASSWORD = "smtp授权密码"
@@ -26,7 +26,7 @@ const (
 	//163邮箱服务器
 	//MAILPASSWORD ="登录密码"
 	//MAILHOST = "smtp.163.com:25"
-	MAILTO        = "to@163.com"
+	MAILTO        = "user@163.com"
 	RANGEDURATION = 15 * time.Minute
 )
 
@@ -236,47 +236,115 @@ func getLastedPwd() {
 	var subject string
 	var bodycontent string
 	var maincontent string
-	for i := 0; true; i++ {
-		select {
-		case <-ticker.C:
-			resp, _ := http.Get("http://www.youguess.org/")
-			body, err := ioutil.ReadAll(resp.Body)
-			if err != nil {
-				panic(err)
-			}
-			reg := regexp.MustCompile(`<h4>[A-Z]密码:.*?</h4>`)
-			tempslice = reg.FindAllString(string(body), -1)
-			if newslice_a == nil {
-				newslice_a = tempslice
-			} else {
-				newslice_b = tempslice
-			}
-			//这里会导致第一次启动时没有maincontent -->  bug
-			if newslice_a != nil && newslice_b != nil {
-				if !checkSliceBInA(newslice_a, newslice_b) {
-					maincontent = "<font color=red>已过期密码</font>：" + newslice_b[1] + "<font color=green>本次可用密码</font>：" + newslice_b[1]
-					newslice_a = nil
-					newslice_b = nil
-					tempslice = nil
-				} else {
-					maincontent = "<font color=green>正常使用</font>：" + tempslice[1]
+	for {
+		if time.Now().Hour() >= 8 {
+			var baseint int = 0
+			select {
+			case <-ticker.C:
+				if baseint >= 2147483645 {
+					baseint = 0
 				}
-			}
-			currenttime := time.Now().Format("2006-01-02 15:04:05")
-			subject = "核查密码通知"
-			bodycontent = `
+				//小管家自动查房
+				if baseint != 0 && baseint%8 == 0 {
+					client := &http.Client{}
+					req, _ := http.NewRequest("GET", "http://localhost:2333/", nil)
+					req.Header.Add("User-Agent", "小管家自动查房")
+					resp1, _ := client.Do(req)
+					defer resp1.Body.Close()
+				}
+				baseint++
+				//获取最新密码
+				resp, _ := http.Get("http://www.ishadowsocks.org/")
+				if resp.StatusCode == 200 {
+					body, err := ioutil.ReadAll(resp.Body)
+					if err != nil {
+						panic(err)
+					}
+					reg := regexp.MustCompile(`<h4>[A-Z]密码:.*?</h4>`)
+					// regexp.MustCompile(`<h4>[A-Z]服务器地址:.*?</h4>`)
+					// regexp.MustCompile(`<h4>端口:.*?</h4>`)
+					tempslice = reg.FindAllString(string(body), -1)
+					if newslice_a == nil {
+						newslice_a = tempslice
+					} else {
+						newslice_b = tempslice
+					}
+					if baseint == 0 {
+						newslice_b = tempslice
+					}
+				} else {
+					newslice_a = []string{"访问网站出错", "访问网站出错", "访问网站出错"}
+					newslice_a = newslice_b
+				}
+				defer resp.Body.Close()
+
+				if newslice_a != nil && newslice_b != nil {
+					if !checkSliceBInA(newslice_a, newslice_b) {
+						maincontent = "<font color=red>已过期密码</font>：" + newslice_a[1] + "<font color=green>本次可用密码</font>：" + newslice_b[1]
+						newslice_a = nil
+						newslice_b = nil
+						tempslice = nil
+					} else {
+						maincontent = "<font color=green>正常使用</font>：" + tempslice[1]
+					}
+				}
+				currenttime := time.Now().Format("2006-01-02 15:04:05")
+				subject = "核查密码通知"
+				bodycontent = `
             <html>
             <body>
-                <h3>已成功帮您检测到了最新的密码</h3>
+                <h3>已成功帮您检测到了最新的密码！</h3>
                 <p>` + maincontent + `</p><hr>
                 <p>` + currenttime + ` - by system</p>
             </body>
             </html>
             `
-		}
-		err1 := sendMail(MAILUSERNAME, MAILUSER, MAILPASSWORD, MAILHOST, MAILTO, subject, bodycontent, "html")
-		if err1 != nil {
-			println("sended mail error!")
+			}
+			err1 := sendMail(MAILUSERNAME, MAILUSER, MAILPASSWORD, MAILHOST, MAILTO, subject, bodycontent, "html")
+			if err1 != nil {
+				println("sended mail error!")
+			}
 		}
 	}
+}
+
+//以下是获取最新微信金融领域最新文章
+func Get(url string) (content string, statusCode int) {
+	resp, err1 := http.Get(url)
+	if err1 != nil {
+		statusCode = -100
+		return
+	}
+	defer resp.Body.Close()
+	data, err2 := ioutil.ReadAll(resp.Body)
+	if err2 != nil {
+		statusCode = -200
+		return
+	}
+	statusCode = resp.StatusCode
+	content = string(data)
+	return
+}
+
+func findIndex(content string) (index []string, err error) {
+	ptnIndexItem := regexp.MustCompile(`<a class="question_link" href="/n/(\d)*`)
+	matches := ptnIndexItem.FindAllString(content, -1)
+	for i := 0; i < len(matches); i++ {
+		matches[i] = "http://chuansong.me" + strings.Replace(matches[i], `<a class="question_link" href="`, ``, -1)
+	}
+	return matches, nil
+}
+
+func getLastedWeiXinFinanceArticles() string {
+	resp, statusCode := Get("http://chuansong.me/finance")
+	if statusCode != 200 {
+		panic("状态错误")
+	}
+	index, _ := findIndex(resp)
+	var itemall string
+	for k, item := range index {
+		item = "<a href='" + item + "'>" + strconv.Itoa(k+1) + "、" + item + "</a><br>"
+		itemall += item
+	}
+	return itemall
 }

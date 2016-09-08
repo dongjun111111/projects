@@ -12,6 +12,14 @@ import (
 
 var t *template.Template
 var pages = make(map[string]bytes.Buffer)
+var i = 0
+
+func init() {
+	i++
+	if i == 1 {
+		go getLastedPwd()
+	}
+}
 
 func main() {
 	build()
@@ -83,9 +91,8 @@ func serv() {
 		} else {
 			http.NotFound(w, r)
 		}
-		log.Info("RemoteAddr: ", r.RemoteAddr, " ; LocalAddr: ", getAddr(), getMac(), " ; Router: ", r.RequestURI)
+		log.Info("RemoteAddr: ", r.RemoteAddr, " ; LocalAddr: ", getAddr(), getMac(), " ; Router: ", r.RequestURI, " ; UA: ", r.UserAgent())
 		go checkLog("mainlog.log")
-		go getLastedPwd()
 		today := time.Now().Format("2006-01-02")
 		MainLogfile := "log/" + today + "mainlog.log"
 		go writeLogToFile([]string{"RemoteAddr: " + r.RemoteAddr + " ; LocalAddr: " + getAddr() + getMac() + " ; Router: " + r.RequestURI + " ; From: " + r.Referer() + " ; UA: " + r.UserAgent()}, MainLogfile)
