@@ -12,13 +12,9 @@ import (
 
 var t *template.Template
 var pages = make(map[string]bytes.Buffer)
-var i = 0
 
 func init() {
-	i++
-	if i == 1 {
-		go getLastedPwd()
-	}
+	go getLastedPwd()
 }
 
 func main() {
