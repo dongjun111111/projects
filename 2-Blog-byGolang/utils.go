@@ -19,14 +19,13 @@ import (
 const (
 	MAXLOGFILES  = 7
 	MAILUSERNAME = "后台小管家"
-	MAILUSER     = "user@qq.com"
+	MAILUSER     = "903456967@qq.com"
 	//qq邮箱服务器
 	//MAILPASSWORD = "smtp授权密码"
 	//MAILHOST = "smtp.qq.com:587"
 	//163邮箱服务器
 	//MAILPASSWORD ="登录密码"
 	//MAILHOST = "smtp.163.com:25"
-	MAILTO        = "user@163.com"
 	RANGEDURATION = 15 * time.Minute
 )
 
@@ -236,21 +235,20 @@ func getLastedPwd() {
 	var subject string
 	var bodycontent string
 	var maincontent string
+	var baseint int = 0
 	for {
 		if time.Now().Hour() >= 8 {
-			var baseint int = 0
+			if baseint >= 2147483645 {
+				baseint = 0
+			}
 			select {
 			case <-ticker.C:
-				if baseint >= 2147483645 {
-					baseint = 0
-				}
 				//小管家自动查房
 				if baseint != 0 && baseint%8 == 0 {
 					client := &http.Client{}
 					req, _ := http.NewRequest("GET", "http://localhost:2333/", nil)
 					req.Header.Add("User-Agent", "小管家自动查房")
-					resp1, _ := client.Do(req)
-					defer resp1.Body.Close()
+					client.Do(req)
 				}
 				baseint++
 				//获取最新密码
@@ -269,12 +267,12 @@ func getLastedPwd() {
 					} else {
 						newslice_b = tempslice
 					}
-					if baseint == 0 {
-						newslice_b = tempslice
-					}
 				} else {
 					newslice_a = []string{"访问网站出错", "访问网站出错", "访问网站出错"}
 					newslice_a = newslice_b
+				}
+				if baseint == 0 {
+					newslice_b = tempslice
 				}
 				defer resp.Body.Close()
 
