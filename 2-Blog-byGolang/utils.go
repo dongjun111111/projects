@@ -18,7 +18,7 @@ import (
 
 const (
 	MAXLOGFILES  = 7
-	MAILUSERNAME = "Jason's litte lovely assistant"
+	MAILUSERNAME = "Jason's little lovely assistant"
 	MAILUSER     = "903456967@qq.com"
 	//qq邮箱服务器
 	//MAILPASSWORD = "smtp授权密码"
