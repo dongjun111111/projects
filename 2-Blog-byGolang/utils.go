@@ -18,7 +18,7 @@ import (
 
 const (
 	MAXLOGFILES  = 7
-	MAILUSERNAME = "后台小管家"
+	MAILUSERNAME = "Jason's litte lovely assistant"
 	MAILUSER     = "903456967@qq.com"
 	//qq邮箱服务器
 	//MAILPASSWORD = "smtp授权密码"
@@ -34,11 +34,10 @@ func sendMail(username, user, password, host, to, subject, body, mailtype string
 	auth := smtp.PlainAuth("", user, password, hp[0])
 	var content_type string
 	if mailtype == "html" {
-		content_type = "Content-Type: text/" + mailtype + "; charset=UTF-8;"
+		content_type = "Content-Type: text/" + mailtype + "; charset=UTF-8"
 	} else {
-		content_type = "Content-Type: text/plain" + "; charset=UTF-8;"
+		content_type = "Content-Type: text/plain" + "; charset=UTF-8"
 	}
-
 	msg := []byte("To: " + to + "\r\nFrom: " + username + "<" + user + ">\r\nSubject: " + subject + "\r\n" + content_type + "\r\n" + body + "\r\n REPLY-TO: " + user)
 	send_to := strings.Split(to, ";")
 	err := smtp.SendMail(host, auth, user, send_to, msg)
@@ -181,7 +180,7 @@ func checkLog(logname string) {
 			}
 		}
 		if removeresult {
-			subject = "博客冗余日志文件成功删除通知"
+			subject = "Redundant log files deleted successfully"
 			body = `
             <html>
             <body>
@@ -195,7 +194,7 @@ func checkLog(logname string) {
             </html>
             `
 		} else {
-			subject = "警告！日志删除失败！！！"
+			subject = "Warning！Log files delete failed！！！"
 			body = `
 			<html>
 			<body>
@@ -287,7 +286,7 @@ func getLastedPwd() {
 					}
 				}
 				currenttime := time.Now().Format("2006-01-02 15:04:05")
-				subject = "核查密码通知"
+				subject = "A notification of checking the password"
 				bodycontent = `
             <html>
             <body>
