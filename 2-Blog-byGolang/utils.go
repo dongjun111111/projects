@@ -196,14 +196,14 @@ func checkLog(logname string) {
 		} else {
 			subject = "Warning！Log files delete failed！！！"
 			body = `
-			<html>
-			<body>
-				<h3><font color=red>日志文件删除失败</font></h3>
-				<p>请尽快登录后台排查问题，以防影响服务器正常工作！</p><hr>
-				<p>` + currenttime + ` - by system</p>
-			</body>
-			</html>
-			`
+            <html>
+            <body>
+                <h3><font color=red>日志文件删除失败</font></h3>
+                <p>请尽快登录后台排查问题，以防影响服务器正常工作！</p><hr>
+                <p>` + currenttime + ` - by system</p>
+            </body>
+            </html>
+            `
 		}
 		t2 := time.Now()
 
@@ -236,58 +236,58 @@ func getLastedPwd() {
 	var maincontent string
 	var baseint int = 0
 	for {
-		if time.Now().Hour() >= 8 {
-			if baseint >= 2147483645 {
-				baseint = 0
+		//if time.Now().Hour() >= 8 {
+		if baseint >= 2147483645 {
+			baseint = 0
+		}
+		select {
+		case <-ticker.C:
+			//小管家自动查房
+			if baseint != 0 && baseint%8 == 0 {
+				client := &http.Client{}
+				req, _ := http.NewRequest("GET", "http://localhost:2333/", nil)
+				req.Header.Add("User-Agent", "小管家自动查房")
+				client.Do(req)
 			}
-			select {
-			case <-ticker.C:
-				//小管家自动查房
-				if baseint != 0 && baseint%8 == 0 {
-					client := &http.Client{}
-					req, _ := http.NewRequest("GET", "http://localhost:2333/", nil)
-					req.Header.Add("User-Agent", "小管家自动查房")
-					client.Do(req)
+			baseint++
+			//获取最新密码
+			resp, _ := http.Get("http://www.ishadowsocks.org/")
+			if resp.StatusCode == 200 {
+				body, err := ioutil.ReadAll(resp.Body)
+				if err != nil {
+					panic(err)
 				}
-				baseint++
-				//获取最新密码
-				resp, _ := http.Get("http://www.ishadowsocks.org/")
-				if resp.StatusCode == 200 {
-					body, err := ioutil.ReadAll(resp.Body)
-					if err != nil {
-						panic(err)
-					}
-					reg := regexp.MustCompile(`<h4>[A-Z]密码:.*?</h4>`)
-					// regexp.MustCompile(`<h4>[A-Z]服务器地址:.*?</h4>`)
-					// regexp.MustCompile(`<h4>端口:.*?</h4>`)
-					tempslice = reg.FindAllString(string(body), -1)
-					if newslice_a == nil {
-						newslice_a = tempslice
-					} else {
-						newslice_b = tempslice
-					}
+				reg := regexp.MustCompile(`<h4>[A-Z]密码:.*?</h4>`)
+				// regexp.MustCompile(`<h4>[A-Z]服务器地址:.*?</h4>`)
+				// regexp.MustCompile(`<h4>端口:.*?</h4>`)
+				tempslice = reg.FindAllString(string(body), -1)
+				if newslice_a == nil {
+					newslice_a = tempslice
 				} else {
-					newslice_a = []string{"访问网站出错", "访问网站出错", "访问网站出错"}
-					newslice_a = newslice_b
-				}
-				if baseint == 0 {
 					newslice_b = tempslice
 				}
-				defer resp.Body.Close()
+			} else {
+				newslice_a = []string{"访问网站出错", "访问网站出错", "访问网站出错"}
+				newslice_a = newslice_b
+			}
+			if baseint == 0 {
+				newslice_b = tempslice
+			}
+			defer resp.Body.Close()
 
-				if newslice_a != nil && newslice_b != nil {
-					if !checkSliceBInA(newslice_a, newslice_b) {
-						maincontent = "<font color=red>已过期密码</font>：" + newslice_a[1] + "<font color=green>本次可用密码</font>：" + newslice_b[1]
-						newslice_a = nil
-						newslice_b = nil
-						tempslice = nil
-					} else {
-						maincontent = "<font color=green>正常使用</font>：" + tempslice[1]
-					}
+			if newslice_a != nil && newslice_b != nil {
+				if !checkSliceBInA(newslice_a, newslice_b) {
+					maincontent = "<font color=red>已过期密码</font>：" + newslice_a[1] + "<font color=green>本次可用密码</font>：" + newslice_b[1]
+					newslice_a = nil
+					newslice_b = nil
+					tempslice = nil
+				} else {
+					maincontent = "<font color=green>正常使用</font>：" + tempslice[1]
 				}
-				currenttime := time.Now().Format("2006-01-02 15:04:05")
-				subject = "A notification of checking the password"
-				bodycontent = `
+			}
+			currenttime := time.Now().Format("2006-01-02 15:04:05")
+			subject = "A notification of checking the password has come"
+			bodycontent = `
             <html>
             <body>
                 <h3>已成功帮您检测到了最新的密码！</h3>
@@ -296,12 +296,12 @@ func getLastedPwd() {
             </body>
             </html>
             `
-			}
-			err1 := sendMail(MAILUSERNAME, MAILUSER, MAILPASSWORD, MAILHOST, MAILTO, subject, bodycontent, "html")
-			if err1 != nil {
-				println("sended mail error!")
-			}
 		}
+		err1 := sendMail(MAILUSERNAME, MAILUSER, MAILPASSWORD, MAILHOST, MAILTO, subject, bodycontent, "html")
+		if err1 != nil {
+			println("sended mail error!")
+		}
+		//}
 	}
 }
 
