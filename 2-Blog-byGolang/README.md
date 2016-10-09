@@ -1,1 +1,1 @@
-最简Blog框架By Golang，无需数据库即可运行，借鉴于github.com/disksing，感谢原作者。
+最简Blog框架By Golang，无需数据库即可运行，借鉴于disksing，感谢。
