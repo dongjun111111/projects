@@ -13,9 +13,9 @@ import (
 var t *template.Template
 var pages = make(map[string]bytes.Buffer)
 
-func init() {
-	go getLastedPwd()
-}
+// func init() {
+// 	go getLastedPwd()
+// }
 
 func main() {
 	build()
